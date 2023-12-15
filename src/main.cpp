@@ -3,7 +3,20 @@
 
 using namespace std;
 
-SDL_Window *window = NULL;
+bool game_running = true;
+
+void _input()
+{
+    SDL_Event event;
+    while(SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT)
+            game_running = false;
+        if (event.type == SDL_MOUSEMOTION)
+            cout << "Mouse moved" << " " << event.motion.x << "," << event.motion.y << endl;
+        if (event.type == SDL_KEYDOWN)
+            cout << "Key pressed" << event.key.keysym.scancode << endl;
+    }
+}
 
 int main()
 {
@@ -14,21 +27,17 @@ int main()
         return 1;
     }
 
-    window = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_RESIZABLE);
+    SDL_Window *window = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_RESIZABLE);
+    if (window == NULL)
+    {
+        cout << "SDL_CreateWindow failed: " << SDL_GetError() << endl;
+        return 1;
+    }
 
-    bool game_running = true;
     while (game_running)
     {
-        SDL_Event event;
-
-        while(SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT)
-                game_running = false;
-            if (event.type == SDL_MOUSEMOTION)
-                cout << "Mouse moved" << " " << event.motion.x << "," << event.motion.y << endl;
-            if (event.type == SDL_KEYDOWN)
-                cout << "Key pressed" << event.key.keysym.scancode << endl;
-        }
+        // Handle all input events this frame (mouse, keyboard, etc) before updating the game state and rendering next frame
+        _input();
     }
 
     SDL_DestroyWindow(window);
