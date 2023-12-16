@@ -7,11 +7,13 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
+                "./glad/src/glad.c", // Add glad.c to the compilation
+                "-g",
                 "${file}",
                 "-I",
                 "./glad/include",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
+                "main",
                 "-l",
                 "SDL2",
             ],
