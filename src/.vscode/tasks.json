@@ -8,6 +8,8 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
+                "-I",
+                "./glad/include",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-l",
