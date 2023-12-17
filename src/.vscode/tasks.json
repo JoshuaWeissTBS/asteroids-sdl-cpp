@@ -9,6 +9,10 @@
                 "-g",
                 "./glad/src/glad.c", // Add glad.c to the compilation
                 "-g",
+                "game.cpp", // Add game.cpp to the compilation
+                "-g",
+                "util.cpp", // Add util.cpp to the compilation
+                "-g",
                 "${file}",
                 "-I",
                 "./glad/include",
