@@ -39,6 +39,17 @@ void _input()
 void _draw(SDL_Window *sdl_window) {
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    SDL_Surface *surface;
+    surface = SDL_GetWindowSurface(sdl_window);
+
+    SDL_Surface *asteroid_surface;
+    asteroid_surface = SDL_LoadBMP("./assets/img/asteroid.bmp");
+    SDL_BlitSurface(asteroid_surface, NULL, surface, NULL);
+    SDL_FreeSurface(asteroid_surface);
+
+    SDL_UpdateWindowSurface(sdl_window);
+
     SDL_GL_SwapWindow(sdl_window);
 }
 
@@ -61,14 +72,20 @@ int main()
     // Color bit depth
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    SDL_Window *sdl_window = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_OPENGL);
+    SDL_Window *sdl_window = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+
+
     if (sdl_window == NULL)
     {
         cout << "SDL_CreateWindow failed: " << SDL_GetError() << endl;
         return 1;
     }
 
+    SDL_Surface *screen;
+    screen = SDL_GetWindowSurface(sdl_window);
+
     gl_context = SDL_GL_CreateContext(sdl_window);
+
 
     // Setup function pointers
     gladLoadGLLoader(SDL_GL_GetProcAddress);
@@ -81,6 +98,7 @@ int main()
 
     while (game_running)
     {
+        
         glViewport(0, 0, 500, 500);
 
         // Handle all input events this frame (mouse, keyboard, etc) before updating the game state and rendering next frame
