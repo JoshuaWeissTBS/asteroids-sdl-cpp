@@ -3,6 +3,8 @@
 #include "SDL2/SDL.h"
 #include "glad/glad.h"
 #include <iostream>
+#include "node.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -19,14 +21,19 @@ public:
     const char *title = "Asteroids";
     int width = 1920;
     int height = 1080;
+    vector<Node> nodes; // Would prefer not to use STD
     SDL_Window *screen_window;
     SDL_Surface *screen_surface;
     SDL_GLContext gl_context;
+    SDL_Renderer *renderer;
     int init(bool fullscreen);
     /// @brief Handles input
     void input();
+    void update(float delta);
     void draw();
     void cleanup();
+    
+private:
     void _on_mouse_move(int x, int y);
 
 };

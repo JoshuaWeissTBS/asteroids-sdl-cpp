@@ -13,9 +13,17 @@
                 "-g",
                 "util.cpp", // Add util.cpp to the compilation
                 "-g",
+                "./sdl_components/texture.cpp", // Add texture.cpp to the compilation
+                "-g",
                 "${file}",
                 "-I",
                 "./glad/include",
+                "-I",
+                "./sdl_components",
+                "-I",
+                "./entities",
+                "-I",
+                "./members",
                 "-o",
                 "main",
                 "-l",

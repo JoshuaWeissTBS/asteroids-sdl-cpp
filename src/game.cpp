@@ -1,5 +1,8 @@
 #include "game.hpp"
 #include "util.hpp"
+#include "sdl_components/texture.hpp"
+#include "entities/node.cpp"
+#include "vector2.cpp"
 
 Game::Game()
 {
@@ -34,6 +37,14 @@ int Game::init(bool fullscreen)
         cout << "SDL_CreateWindow failed: " << SDL_GetError() << endl;
         return 1;
     }
+
+    renderer = SDL_CreateRenderer(screen_window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == NULL) {
+        cout << "SDL_CreateRenderer failed: " << SDL_GetError() << endl;
+        return 1;
+    }
+
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     screen_surface = SDL_GetWindowSurface(screen_window);
     if (screen_surface == NULL) {
@@ -81,24 +92,50 @@ void Game::input()
         if (state[SDL_SCANCODE_LEFT])
         {
             cout << "Left arrow pressed" << endl;
+            int x = rand() % 1920;
+            int y = rand() % 1080;
+            Node asteroid = Node(Vector2(x, y), 100, 100);
+            asteroid.velocity = Vector2(1, 1);
+            asteroid.set_sprite("assets/img/asteroid.bmp", renderer);
+            nodes.push_back(asteroid);
         }
+    }
+}
+
+void Game::update(float delta)
+{
+    // Loop through all nodes and update their properties
+    for (int i = 0; i < nodes.size(); i++) {
+        cout << "Node " << i << " position: " << nodes[i].position.x << ", " << nodes[i].position.y << endl;
+        nodes[i].move(delta);
     }
 }
 
 void Game::draw()
 {
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    // Loop through all nodes and render them
+    for (int i = 0; i < nodes.size(); i++) {
+        nodes[i].render(renderer);
+    }
 
-
-    SDL_UpdateWindowSurface(screen_window);
-    SDL_GL_SwapWindow(screen_window);
+    //SDL_UpdateWindowSurface(screen_window);
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderPresent(renderer);
+    // SDL_GL_SwapWindow(screen_window);
 }
 
 void Game::cleanup()
 {
     SDL_GL_DeleteContext(gl_context);
+    gl_context = NULL;
+
     SDL_DestroyWindow(screen_window);
+    screen_surface = NULL;
+    screen_window = NULL;
+
+    SDL_DestroyRenderer(renderer);
+    renderer = NULL;
+
     SDL_Quit();
 }
 
