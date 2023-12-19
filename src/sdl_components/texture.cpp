@@ -1,4 +1,5 @@
 #include "texture.hpp"
+#include "game.hpp"
 
 Texture::Texture()
 {
@@ -8,7 +9,7 @@ Texture::~Texture()
 {
 }
 
-bool Texture::load_from_file (const char *path, SDL_Renderer *renderer)
+bool Texture::load_from_file (const char *path)
 {
     free();
 
@@ -49,7 +50,7 @@ void Texture::free()
     }
 }
 
-void Texture::render(int x, int y, SDL_Renderer *renderer)
+void Texture::render(int x, int y)
 {
     // Set rendering space and render to screen
     SDL_Rect render_quad = {x, y, width, height};

@@ -19,9 +19,11 @@ public:
     float rotation_degrees; // not implemented yet
     int width;
     int height;
-    void set_sprite(const char * path, SDL_Renderer *renderer);
+    virtual void input(SDL_Event *event);
+    virtual void on_ready();
+    void set_sprite(const char * path);
     void move(float delta); // Should be called once per frame
-    void render(SDL_Renderer *renderer); // Call once per frame after move() and other properties have been updated
+    void render(); // Call once per frame after move() and other properties have been updated
 
 private:
     Texture *texture;

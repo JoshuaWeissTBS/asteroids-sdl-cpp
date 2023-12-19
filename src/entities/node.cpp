@@ -18,13 +18,21 @@ Node::~Node()
 {
 }
 
-void Node::set_sprite(const char * path, SDL_Renderer *renderer)
+void Node::input(SDL_Event *event)
+{
+}
+
+void Node::on_ready()
+{
+}
+
+void Node::set_sprite(const char * path)
 {
     if (texture == NULL) {
         texture = new Texture();
     }
 
-    bool success = texture->load_from_file(path, renderer);
+    bool success = texture->load_from_file(path);
     if (!success) {
         printf("Failed to load texture image!\n");
     }
@@ -36,7 +44,7 @@ void Node::move(float delta)
     position.y += velocity.y * delta;
 }
 
-void Node::render(SDL_Renderer *renderer)
+void Node::render()
 {
-    texture->render(position.x, position.y, renderer);
+    texture->render(position.x, position.y);
 }

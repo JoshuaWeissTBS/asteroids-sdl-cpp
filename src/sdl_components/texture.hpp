@@ -13,9 +13,9 @@ public:
     ~Texture();
 
     SDL_Texture *media_texture;
-    bool load_from_file (const char *path, SDL_Renderer *renderer);
+    bool load_from_file (const char *path);
     void free();
-    void render(int x, int y, SDL_Renderer *renderer);
+    void render(int x, int y);
     int get_width();
     int get_height();
 

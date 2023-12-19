@@ -14,13 +14,6 @@ int main()
         game.running = true;
     }
 
-    // asteroid texture
-    Texture asteroid_texture = Texture();
-    err = asteroid_texture.load_from_file("assets/img/asteroid.bmp", game.renderer);
-    if (err == 0) {
-        cout << "Asteroid texture loaded" << endl;
-    }
-
     Uint32 last_frame_time = SDL_GetTicks();
 
     // Game loop
@@ -34,7 +27,7 @@ int main()
         last_frame_time = current_time;
 
         // Clear the screen
-        SDL_RenderClear(game.renderer);
+        SDL_RenderClear(renderer);
 
         // Handle all input events this frame (mouse, keyboard, etc) before updating the game state and rendering next frame
         game.input();
@@ -46,7 +39,7 @@ int main()
         game.draw();
 
         // Update the screen
-        SDL_RenderPresent(game.renderer);
+        SDL_RenderPresent(renderer);
 
         // Cap framerate at 60 FPS
         Uint32 elapsed_time = SDL_GetTicks() - last_frame_time;

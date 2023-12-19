@@ -24,6 +24,8 @@
                 "./entities",
                 "-I",
                 "./members",
+                "-I",
+                "./",
                 "-o",
                 "main",
                 "-l",

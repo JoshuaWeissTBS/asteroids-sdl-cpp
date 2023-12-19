@@ -8,6 +8,8 @@
 
 using namespace std;
 
+extern SDL_Renderer *renderer;
+extern SDL_Window *screen_window;
 class Game {
 public:
     // Constructor
@@ -23,10 +25,8 @@ public:
     int width = 1920;
     int height = 1080;
     vector<Node> nodes; // Would prefer not to use STD
-    SDL_Window *screen_window;
     SDL_Surface *screen_surface;
     SDL_GLContext gl_context;
-    SDL_Renderer *renderer;
     int init(bool fullscreen);
     /// @brief Handles input
     void input();

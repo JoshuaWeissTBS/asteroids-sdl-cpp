@@ -4,6 +4,9 @@
 #include "entities/node.cpp"
 #include "vector2.cpp"
 
+SDL_Renderer *renderer = NULL;
+SDL_Window *screen_window = NULL;
+
 Game::Game()
 {
 }
@@ -14,7 +17,8 @@ Game::~Game()
 
 int Game::init(bool fullscreen)
 {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
         cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
         return 1;
     }
@@ -28,18 +32,21 @@ int Game::init(bool fullscreen)
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    if (fullscreen) {
+    if (fullscreen)
+    {
         window_flags = (SDL_WindowFlags)(window_flags | SDL_WINDOW_FULLSCREEN);
     }
 
     screen_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
-    if (screen_window == NULL) {
+    if (screen_window == NULL)
+    {
         cout << "SDL_CreateWindow failed: " << SDL_GetError() << endl;
         return 1;
     }
 
     renderer = SDL_CreateRenderer(screen_window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL) {
+    if (renderer == NULL)
+    {
         cout << "SDL_CreateRenderer failed: " << SDL_GetError() << endl;
         return 1;
     }
@@ -47,19 +54,22 @@ int Game::init(bool fullscreen)
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     screen_surface = SDL_GetWindowSurface(screen_window);
-    if (screen_surface == NULL) {
+    if (screen_surface == NULL)
+    {
         cout << "SDL_GetWindowSurface failed: " << SDL_GetError() << endl;
         return 1;
     }
 
     gl_context = SDL_GL_CreateContext(screen_window);
-    if (gl_context == NULL) {
+    if (gl_context == NULL)
+    {
         cout << "SDL_GL_CreateContext failed: " << SDL_GetError() << endl;
         return 1;
     }
 
     // Setup function pointers
-    if (gladLoadGLLoader(SDL_GL_GetProcAddress) == 0) {
+    if (gladLoadGLLoader(SDL_GL_GetProcAddress) == 0)
+    {
         cout << "Failed to initialize OpenGL context" << endl;
         return 1;
     }
@@ -72,15 +82,22 @@ int Game::init(bool fullscreen)
 void Game::input()
 {
     SDL_Event event;
-    while(SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event))
+    {
+        // Handle input for all nodes
+        for (int i = 0; i < nodes.size(); i++)
+        {
+            nodes[i].input(&event);
+        }
+
         switch (event.type)
         {
-            case SDL_QUIT:
-                running = false;
-                break;
-            case SDL_MOUSEMOTION:
-                _on_mouse_move(event.motion.x, event.motion.y);
-                break;
+        case SDL_QUIT:
+            running = false;
+            break;
+        case SDL_MOUSEMOTION:
+            _on_mouse_move(event.motion.x, event.motion.y);
+            break;
         }
 
         // Keyboard inputs
@@ -96,7 +113,7 @@ void Game::input()
             int y = rand() % 1080;
             Node asteroid = Node(Vector2(x, y), 100, 100);
             asteroid.velocity = Vector2(100, 100);
-            asteroid.set_sprite("assets/img/asteroid.bmp", renderer);
+            asteroid.set_sprite("assets/img/asteroid.bmp");
             nodes.push_back(asteroid);
         }
     }
@@ -105,7 +122,8 @@ void Game::input()
 void Game::update(float delta)
 {
     // Loop through all nodes and update their properties
-    for (int i = 0; i < nodes.size(); i++) {
+    for (int i = 0; i < nodes.size(); i++)
+    {
         cout << "Node " << i << " position: " << nodes[i].position.x << ", " << nodes[i].position.y << endl;
         nodes[i].move(delta);
     }
@@ -114,11 +132,12 @@ void Game::update(float delta)
 void Game::draw()
 {
     // Loop through all nodes and render them
-    for (int i = 0; i < nodes.size(); i++) {
-        nodes[i].render(renderer);
+    for (int i = 0; i < nodes.size(); i++)
+    {
+        nodes[i].render();
     }
 
-    //SDL_UpdateWindowSurface(screen_window);
+    // SDL_UpdateWindowSurface(screen_window);
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderPresent(renderer);
     // SDL_GL_SwapWindow(screen_window);
@@ -149,20 +168,23 @@ void Game::_on_mouse_move(int x, int y)
     int radius = 50;
     Util util;
 
-    for (int i = 0; i < radius; i++) {
-        for (int j = -radius; j < radius; j++) {
+    for (int i = 0; i < radius; i++)
+    {
+        for (int j = -radius; j < radius; j++)
+        {
             int top_pixel = (y - i) * screen_surface->w + x + j;
-            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y - i)) {
+            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y - i))
+            {
                 pixels[top_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
             }
 
             int bot_pixel = (y + i) * screen_surface->w + x + j;
-            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y + i)) {
+            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y + i))
+            {
                 pixels[bot_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
             }
         }
     };
-    
+
     SDL_UnlockSurface(screen_surface);
 }
-
