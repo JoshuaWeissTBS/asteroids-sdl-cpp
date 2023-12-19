@@ -95,7 +95,7 @@ void Game::input()
             int x = rand() % 1920;
             int y = rand() % 1080;
             Node asteroid = Node(Vector2(x, y), 100, 100);
-            asteroid.velocity = Vector2(1, 1);
+            asteroid.velocity = Vector2(100, 100);
             asteroid.set_sprite("assets/img/asteroid.bmp", renderer);
             nodes.push_back(asteroid);
         }
