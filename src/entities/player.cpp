@@ -4,7 +4,8 @@
 
 Player::Player(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
-    this->set_sprite("assets/img/spaceship.bmp");
+    set_sprite("assets/img/spaceship.bmp");
+    set_sprite_size(100, 100);
 }
 
 void Player::input(SDL_Event *event)

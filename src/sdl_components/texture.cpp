@@ -56,6 +56,28 @@ void Texture::free()
     }
 }
 
+int Texture::get_width()
+{
+    return width;
+}
+
+int Texture::get_height()
+{
+    return height;
+}
+
+void Texture::set_size(int width, int height)
+{
+    // Check if width and height are valid
+    if (width <= 0 || height <= 0) {
+        // TODO: throw error
+        return;
+    }
+    
+    this->width = width;
+    this->height = height;
+}
+
 void Texture::render(int x, int y)
 {
     if (texture == NULL) {

@@ -116,7 +116,7 @@ void Game::input()
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
-            Asteroid *asteroid = new Asteroid(Vector2(100, 100), 100, 100);
+            Asteroid *asteroid = new Asteroid(Vector2(500, 500), 100, 100);
 
             nodes.push_back(asteroid);
         }

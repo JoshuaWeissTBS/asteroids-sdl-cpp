@@ -34,6 +34,11 @@ public:
     /// @param path The path to the image file
     void set_sprite(const char * path);
 
+    /// @brief Sets the size of the sprite
+    /// @param width 
+    /// @param height 
+    void set_sprite_size(int width, int height);
+
     /// @brief Updates the position of the node based on its velocity, called once per frame by engine
     void move();
 

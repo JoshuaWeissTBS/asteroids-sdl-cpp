@@ -42,6 +42,11 @@ void Node::move()
     position.y += velocity.y;
 }
 
+void Node::set_sprite_size(int width, int height)
+{
+    texture->set_size(width, height);
+}
+
 void Node::render()
 {
     // TODO: Throw an error instead of printing to stdout

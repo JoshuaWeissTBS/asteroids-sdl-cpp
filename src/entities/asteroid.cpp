@@ -3,7 +3,7 @@
 
 Asteroid::Asteroid(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
-    this->velocity = Vector2(100, -100);
+    this->velocity = Vector2(5, 5);
     this->set_sprite("assets/img/asteroid.bmp");
 }
 

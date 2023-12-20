@@ -18,6 +18,7 @@ public:
     void render(int x, int y);
     int get_width();
     int get_height();
+    void set_size(int width, int height);
 
 private:
     SDL_Texture *texture = NULL;
