@@ -4,6 +4,7 @@
 #include "entities/node.cpp"
 #include "entities/asteroid.cpp"
 #include "vector2.cpp"
+#include "entities/player.cpp"
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
@@ -107,19 +108,14 @@ void Game::input()
         {
             running = false;
         }
-        if (state[SDL_SCANCODE_LEFT])
+        if (state[SDL_SCANCODE_SPACE])
         {
-            cout << "Left arrow pressed" << endl;
-            int x = rand() % 1920;
-            int y = rand() % 1080;
-            Node *asteroid = new Node(Vector2(x, y), 100, 100);
-            asteroid->velocity = Vector2(100, 100);
-            asteroid->set_sprite("assets/img/asteroid.bmp");
-            nodes.push_back(asteroid);
+            Player *player = new Player(Vector2(0, 0), 100, 100);
+
+            nodes.push_back(player);
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
-            cout << "Right arrow pressed" << endl;
             Asteroid *asteroid = new Asteroid(Vector2(100, 100), 100, 100);
 
             nodes.push_back(asteroid);
@@ -132,7 +128,8 @@ void Game::update(float delta)
     // Loop through all nodes and update their properties
     for (int i = 0; i < nodes.size(); i++)
     {
-        nodes[i]->move(delta);
+        nodes[i]->physics_process(delta);
+        nodes[i]->move();
     }
 }
 
@@ -179,20 +176,19 @@ void Game::_on_mouse_move(int x, int y)
     Uint32 *pixels = (Uint32 *)screen_surface->pixels;
 
     int radius = 50;
-    Util util;
 
     for (int i = 0; i < radius; i++)
     {
         for (int j = -radius; j < radius; j++)
         {
             int top_pixel = (y - i) * screen_surface->w + x + j;
-            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y - i))
+            if (!Util::pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y - i))
             {
                 pixels[top_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
             }
 
             int bot_pixel = (y + i) * screen_surface->w + x + j;
-            if (!util.pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y + i))
+            if (!Util::pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y + i))
             {
                 pixels[bot_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
             }

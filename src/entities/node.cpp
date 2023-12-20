@@ -36,10 +36,10 @@ void Node::set_sprite(const char *path)
     }
 }
 
-void Node::move(float delta)
+void Node::move()
 {
-    position.x += velocity.x * delta;
-    position.y += velocity.y * delta;
+    position.x += velocity.x;
+    position.y += velocity.y;
 }
 
 void Node::render()
@@ -54,3 +54,6 @@ void Node::render()
     texture->render(position.x, position.y);
 }
 
+void Node::physics_process(float delta)
+{
+}

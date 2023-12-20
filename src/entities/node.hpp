@@ -26,13 +26,16 @@ public:
     /// @brief Handles input
     virtual void input(SDL_Event *event);
 
+    /// @brief Called once per frame, meant to be overridden by child classes
+    /// @param delta
+    virtual void physics_process(float delta);
+
     /// @brief Sets the sprite of the node (texture internally)
     /// @param path The path to the image file
     void set_sprite(const char * path);
 
-    /// @brief Updates the position of the node based on its velocity
-    /// @param delta The time since the last frame
-    void move(float delta); // Should be called once per frame
+    /// @brief Updates the position of the node based on its velocity, called once per frame by engine
+    void move();
 
     /// @brief Renders the node to the screen, called once per frame after move() and other properties have been updated
     void render();

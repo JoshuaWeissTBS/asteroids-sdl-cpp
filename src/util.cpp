@@ -24,3 +24,24 @@ bool Util::pixel_out_of_bounds(int surface_width, int surface_height, int x, int
 
     return false;
 }
+
+float Util::move_toward(float current, float target, float max_delta)
+{
+    if (current < target)
+    {
+        current += max_delta;
+        if (current > target)
+        {
+            current = target;
+        }
+    }
+    else if (current > target)
+    {
+        current -= max_delta;
+        if (current < target)
+        {
+            current = target;
+        }
+    }
+    return current;
+}
