@@ -6,6 +6,9 @@
 
 using namespace std;
 
+/// This class' implementation should be left alone as it is a base node class
+/// Either use this node as is or create a new node class that inherits from this one
+
 class Node {
 public:
     // Constructor
@@ -19,14 +22,23 @@ public:
     float rotation_degrees; // not implemented yet
     int width;
     int height;
+
+    /// @brief Handles input
     virtual void input(SDL_Event *event);
-    virtual void on_ready();
+
+    /// @brief Sets the sprite of the node (texture internally)
+    /// @param path The path to the image file
     void set_sprite(const char * path);
+
+    /// @brief Updates the position of the node based on its velocity
+    /// @param delta The time since the last frame
     void move(float delta); // Should be called once per frame
-    void render(); // Call once per frame after move() and other properties have been updated
+
+    /// @brief Renders the node to the screen, called once per frame after move() and other properties have been updated
+    void render();
 
 private:
-    Texture *texture;
+    Texture *texture = NULL;
 };
 
 #endif

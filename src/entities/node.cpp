@@ -11,7 +11,6 @@ Node::Node(Vector2 position, int width, int height, int rotation_degrees = 0)
     this->height = height;
     this->rotation_degrees = rotation_degrees;
     this->velocity = Vector2(0, 0);
-    this->texture = NULL;
 }
 
 Node::~Node()
@@ -22,18 +21,17 @@ void Node::input(SDL_Event *event)
 {
 }
 
-void Node::on_ready()
+void Node::set_sprite(const char *path)
 {
-}
-
-void Node::set_sprite(const char * path)
-{
-    if (texture == NULL) {
+    if (texture == NULL)
+    {
         texture = new Texture();
     }
 
     bool success = texture->load_from_file(path);
-    if (!success) {
+    if (!success)
+    {
+        // TODO: Throw an error instead of printing to stdout
         printf("Failed to load texture image!\n");
     }
 }
@@ -46,5 +44,13 @@ void Node::move(float delta)
 
 void Node::render()
 {
+    // TODO: Throw an error instead of printing to stdout
+    if (texture == NULL)
+    {
+        printf("Cannot render node, texture is NULL\n");
+        return;
+    }
+
     texture->render(position.x, position.y);
 }
+

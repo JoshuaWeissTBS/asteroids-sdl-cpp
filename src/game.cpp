@@ -2,6 +2,7 @@
 #include "util.hpp"
 #include "sdl_components/texture.hpp"
 #include "entities/node.cpp"
+#include "entities/asteroid.cpp"
 #include "vector2.cpp"
 
 SDL_Renderer *renderer = NULL;
@@ -87,7 +88,7 @@ void Game::input()
         // Handle input for all nodes
         for (int i = 0; i < nodes.size(); i++)
         {
-            nodes[i].input(&event);
+            nodes[i]->input(&event);
         }
 
         switch (event.type)
@@ -111,9 +112,16 @@ void Game::input()
             cout << "Left arrow pressed" << endl;
             int x = rand() % 1920;
             int y = rand() % 1080;
-            Node asteroid = Node(Vector2(x, y), 100, 100);
-            asteroid.velocity = Vector2(100, 100);
-            asteroid.set_sprite("assets/img/asteroid.bmp");
+            Node *asteroid = new Node(Vector2(x, y), 100, 100);
+            asteroid->velocity = Vector2(100, 100);
+            asteroid->set_sprite("assets/img/asteroid.bmp");
+            nodes.push_back(asteroid);
+        }
+        if (state[SDL_SCANCODE_RIGHT])
+        {
+            cout << "Right arrow pressed" << endl;
+            Asteroid *asteroid = new Asteroid(Vector2(100, 100), 100, 100);
+
             nodes.push_back(asteroid);
         }
     }
@@ -124,8 +132,7 @@ void Game::update(float delta)
     // Loop through all nodes and update their properties
     for (int i = 0; i < nodes.size(); i++)
     {
-        cout << "Node " << i << " position: " << nodes[i].position.x << ", " << nodes[i].position.y << endl;
-        nodes[i].move(delta);
+        nodes[i]->move(delta);
     }
 }
 
@@ -134,7 +141,7 @@ void Game::draw()
     // Loop through all nodes and render them
     for (int i = 0; i < nodes.size(); i++)
     {
-        nodes[i].render();
+        nodes[i]->render();
     }
 
     // SDL_UpdateWindowSurface(screen_window);
@@ -145,6 +152,12 @@ void Game::draw()
 
 void Game::cleanup()
 {
+    // Delete all nodes
+    for (int i = 0; i < nodes.size(); i++)
+    {
+        delete nodes[i];
+    }
+
     SDL_GL_DeleteContext(gl_context);
     gl_context = NULL;
 

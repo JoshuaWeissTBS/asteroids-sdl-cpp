@@ -24,7 +24,7 @@ public:
     int max_fps = 60;
     int width = 1920;
     int height = 1080;
-    vector<Node> nodes; // Would prefer not to use STD
+    vector<Node*> nodes; // Would prefer not to use STD
     SDL_Surface *screen_surface;
     SDL_GLContext gl_context;
     int init(bool fullscreen);
