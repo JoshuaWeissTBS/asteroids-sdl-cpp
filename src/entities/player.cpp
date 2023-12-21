@@ -21,6 +21,7 @@ void Player::physics_process(float delta)
         velocity.x = Util::move_toward(velocity.x, 0, deceleration * delta);
     } else {
         velocity.x += direction.x * acceleration * delta;
+        rotation_degrees += 1;
     }
 
     if (direction.y == 0)

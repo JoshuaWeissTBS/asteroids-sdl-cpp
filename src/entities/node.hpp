@@ -19,7 +19,7 @@ public:
 
     Vector2 position;
     Vector2 velocity;
-    float rotation_degrees; // not implemented yet
+    float rotation_degrees;
     int width;
     int height;
 

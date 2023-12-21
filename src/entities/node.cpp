@@ -56,7 +56,7 @@ void Node::render()
         return;
     }
 
-    texture->render(position.x, position.y);
+    texture->render(position.x, position.y, NULL, rotation_degrees);
 }
 
 void Node::physics_process(float delta)
