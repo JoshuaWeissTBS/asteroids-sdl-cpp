@@ -15,3 +15,13 @@ Vector2 Vector2::rotated(float radians) {
 
     return Vector2(x2, y2);
 }
+
+float Vector2::length() {
+    return sqrt((x * x) + (y * y));
+}
+
+Vector2 Vector2::normalized() {
+    // Could be faster potentially with fast inverse square root
+    float length = this->length();
+    return Vector2(x / length, y / length);
+}

@@ -12,7 +12,7 @@ public:
     Player(Vector2 position, int width, int height, int rotation_degrees = 0);
 
     int max_speed = 10;
-    int acceleration = 10;
+    int acceleration = 20;
     int deceleration = 10;
     void input(SDL_Event *event) override;
     void physics_process(float delta) override;

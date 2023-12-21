@@ -16,7 +16,6 @@ void Player::physics_process(float delta)
 {
     Vector2 input_direction = _get_move_input_direction();
     Vector2 facing_direction = get_direction().rotated(M_PI / 2);
-    cout << facing_direction.x << ", " << facing_direction.y << endl;
 
     if (input_direction.x != 0)
     {
@@ -25,8 +24,9 @@ void Player::physics_process(float delta)
 
     if (input_direction.y == 0)
     {
-        velocity.y = Util::move_toward(velocity.y, 0, deceleration * delta);
-        velocity.x = Util::move_toward(velocity.x, 0, deceleration * delta);
+        Vector2 normalized = velocity.normalized();
+        velocity.y = Util::move_toward(velocity.y, 0, abs(normalized.y) * deceleration * delta);
+        velocity.x = Util::move_toward(velocity.x, 0, abs(normalized.x) * deceleration * delta);
     } else {
         velocity.y += input_direction.y * facing_direction.y * acceleration * delta;
         velocity.x += input_direction.y * facing_direction.x * acceleration * delta;
