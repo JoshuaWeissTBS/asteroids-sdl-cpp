@@ -22,14 +22,13 @@ void Player::physics_process(float delta)
         rotation_degrees += 200 * input_direction.x * delta;
     }
 
-    if (input_direction.y == 0)
-    {
+    if (input_direction.y == -1) {
+        velocity.y += input_direction.y * facing_direction.y * acceleration * delta;
+        velocity.x += input_direction.y * facing_direction.x * acceleration * delta;
+    } else {
         Vector2 normalized = velocity.normalized();
         velocity.y = Util::move_toward(velocity.y, 0, abs(normalized.y) * deceleration * delta);
         velocity.x = Util::move_toward(velocity.x, 0, abs(normalized.x) * deceleration * delta);
-    } else {
-        velocity.y += input_direction.y * facing_direction.y * acceleration * delta;
-        velocity.x += input_direction.y * facing_direction.x * acceleration * delta;
     }
 
     if (velocity.x > max_speed) {
