@@ -30,6 +30,10 @@ public:
     /// @param delta
     virtual void physics_process(float delta);
 
+    /// @brief Gets the direction the node is facing as a Vector2
+    /// @return Vector2
+    Vector2 get_direction();
+
     /// @brief Sets the sprite of the node (texture internally)
     /// @param path The path to the image file
     void set_sprite(const char * path);

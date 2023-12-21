@@ -5,7 +5,7 @@
 Player::Player(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     set_sprite("assets/img/spaceship.bmp");
-    set_sprite_size(100, 100);
+    set_sprite_size(width, height);
 }
 
 void Player::input(SDL_Event *event)
@@ -14,21 +14,22 @@ void Player::input(SDL_Event *event)
 
 void Player::physics_process(float delta)
 {
-    Vector2 direction = _get_move_direction();
+    Vector2 input_direction = _get_move_input_direction();
+    Vector2 facing_direction = get_direction().rotated(M_PI / 2);
+    cout << facing_direction.x << ", " << facing_direction.y << endl;
 
-    if (direction.x == 0)
+    if (input_direction.x != 0)
     {
-        velocity.x = Util::move_toward(velocity.x, 0, deceleration * delta);
-    } else {
-        velocity.x += direction.x * acceleration * delta;
-        rotation_degrees += 1;
+        rotation_degrees += 200 * input_direction.x * delta;
     }
 
-    if (direction.y == 0)
+    if (input_direction.y == 0)
     {
         velocity.y = Util::move_toward(velocity.y, 0, deceleration * delta);
+        velocity.x = Util::move_toward(velocity.x, 0, deceleration * delta);
     } else {
-        velocity.y += direction.y * acceleration * delta;
+        velocity.y += input_direction.y * facing_direction.y * acceleration * delta;
+        velocity.x += input_direction.y * facing_direction.x * acceleration * delta;
     }
 
     if (velocity.x > max_speed) {
@@ -48,7 +49,7 @@ void Player::physics_process(float delta)
     }
 }
 
-Vector2 Player::_get_move_direction()
+Vector2 Player::_get_move_input_direction()
 {
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     Vector2 direction = Vector2(0, 0);

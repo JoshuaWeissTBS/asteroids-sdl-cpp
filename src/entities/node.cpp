@@ -3,6 +3,8 @@
 #include "texture.hpp"
 #include <iostream>
 
+using namespace std;
+
 Node::Node(Vector2 position, int width, int height, int rotation_degrees = 0)
 {
     // TODO: Do I need to check if position is out of bounds?
@@ -34,6 +36,12 @@ void Node::set_sprite(const char *path)
         // TODO: Throw an error instead of printing to stdout
         printf("Failed to load texture image!\n");
     }
+}
+
+Vector2 Node::get_direction()
+{
+    float radians = rotation_degrees * (M_PI / 180);
+    return Vector2(cos(radians), sin(radians));
 }
 
 void Node::move()

@@ -20,7 +20,7 @@ public:
 private:
     /// @brief Checks movement input and returns a vector2 representing the direction to move
     /// @return Vector2 representing the direction to move
-    Vector2 _get_move_direction();
+    Vector2 _get_move_input_direction();
 };
 
 #endif

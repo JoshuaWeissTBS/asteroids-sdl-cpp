@@ -13,6 +13,8 @@ public:
 
     float x;
     float y;
+
+    Vector2 rotated(float degrees);
 };
 
 #endif // Vector2_HPP
