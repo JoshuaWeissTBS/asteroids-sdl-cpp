@@ -78,7 +78,7 @@ void Texture::set_size(int width, int height)
     this->height = height;
 }
 
-void Texture::render(int x, int y)
+void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *center, SDL_RendererFlip flip)
 {
     if (texture == NULL) {
         // TODO: Throw an error instead of printing to stdout
@@ -88,5 +88,11 @@ void Texture::render(int x, int y)
     // Set rendering space and render to screen
     SDL_Rect render_quad = {x, y, width, height};
 
-    SDL_RenderCopy(renderer, texture, NULL, &render_quad);
+    // Set clip rendering dimensions
+    if (clip != NULL) {
+        render_quad.w = clip->w;
+        render_quad.h = clip->h;
+    }
+
+    SDL_RenderCopyEx(renderer, texture, clip, &render_quad, angle, center, flip);
 }

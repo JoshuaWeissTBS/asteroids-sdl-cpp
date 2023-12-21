@@ -110,7 +110,7 @@ void Game::input()
         }
         if (state[SDL_SCANCODE_SPACE])
         {
-            Player *player = new Player(Vector2(0, 0), 100, 100);
+            Player *player = new Player(Vector2(0, 0), 65, 65);
 
             nodes.push_back(player);
         }
@@ -142,7 +142,7 @@ void Game::draw()
     }
 
     // SDL_UpdateWindowSurface(screen_window);
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderPresent(renderer);
     // SDL_GL_SwapWindow(screen_window);
 }

@@ -3,6 +3,8 @@
 #include "texture.hpp"
 #include <iostream>
 
+using namespace std;
+
 Node::Node(Vector2 position, int width, int height, int rotation_degrees = 0)
 {
     // TODO: Do I need to check if position is out of bounds?
@@ -36,6 +38,12 @@ void Node::set_sprite(const char *path)
     }
 }
 
+Vector2 Node::get_direction()
+{
+    float radians = rotation_degrees * (M_PI / 180);
+    return Vector2(cos(radians), sin(radians));
+}
+
 void Node::move()
 {
     position.x += velocity.x;
@@ -56,7 +64,7 @@ void Node::render()
         return;
     }
 
-    texture->render(position.x, position.y);
+    texture->render(position.x, position.y, NULL, rotation_degrees);
 }
 
 void Node::physics_process(float delta)

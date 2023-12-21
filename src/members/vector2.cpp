@@ -8,3 +8,20 @@ Vector2::Vector2(float x, float y) {
 
 Vector2::~Vector2() {
 }
+
+Vector2 Vector2::rotated(float radians) {
+    float x2 = x * cos(radians) - y * sin(radians);
+    float y2 = x * sin(radians) + y * cos(radians);
+
+    return Vector2(x2, y2);
+}
+
+float Vector2::length() {
+    return sqrt((x * x) + (y * y));
+}
+
+Vector2 Vector2::normalized() {
+    // Could be faster potentially with fast inverse square root
+    float length = this->length();
+    return Vector2(x / length, y / length);
+}
