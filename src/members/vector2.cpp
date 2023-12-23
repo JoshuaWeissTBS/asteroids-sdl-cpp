@@ -25,3 +25,8 @@ Vector2 Vector2::normalized() {
     float length = this->length();
     return Vector2(x / length, y / length);
 }
+
+Vector2 Vector2::direction_to(Vector2 target) {
+    Vector2 direction = Vector2(target.x - x, target.y - y);
+    return direction.normalized();
+}

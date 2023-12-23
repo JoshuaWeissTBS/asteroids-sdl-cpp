@@ -46,6 +46,8 @@ void Player::physics_process(float delta)
     if (velocity.y < -max_speed) {
         velocity.y = -max_speed;
     }
+
+    move();
 }
 
 Vector2 Player::_get_move_input_direction()

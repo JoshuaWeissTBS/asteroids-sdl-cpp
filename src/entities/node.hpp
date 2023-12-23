@@ -19,9 +19,11 @@ public:
 
     Vector2 position;
     Vector2 velocity;
-    float rotation_degrees;
+    double rotation_degrees;
     int width;
     int height;
+    // If true, the node will be deleted at the end of the frame
+    bool marked_for_deletion = false;
 
     /// @brief Handles input
     virtual void input(SDL_Event *event);
@@ -43,12 +45,13 @@ public:
     /// @param height 
     void set_sprite_size(int width, int height);
 
-    /// @brief Updates the position of the node based on its velocity, called once per frame by engine
+    /// @brief Updates the position of the node based on its velocity
     void move();
 
     /// @brief Renders the node to the screen, called once per frame after move() and other properties have been updated
     void render();
 
+    SDL_Rect collider;
 private:
     Texture *texture = NULL;
 };

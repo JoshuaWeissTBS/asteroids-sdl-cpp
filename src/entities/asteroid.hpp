@@ -12,6 +12,7 @@ public:
     Asteroid(Vector2 position, int width, int height, int rotation_degrees = 0);
 
     void input(SDL_Event *event) override;
+    void physics_process(float delta) override;
 };
 
 #endif
