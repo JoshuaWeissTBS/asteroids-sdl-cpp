@@ -22,6 +22,8 @@ public:
     double rotation_degrees;
     int width;
     int height;
+    // If true, the node will be deleted at the end of the frame
+    bool marked_for_deletion = false;
 
     /// @brief Handles input
     virtual void input(SDL_Event *event);

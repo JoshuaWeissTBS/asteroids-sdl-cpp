@@ -149,6 +149,13 @@ void Game::update(float delta)
     for (int i = 0; i < nodes.size(); i++)
     {
         nodes[i]->physics_process(delta);
+        if (nodes[i]->marked_for_deletion)
+        {
+            delete nodes[i];
+            // TODO: PERFORMANCE: erase is expensive, find a better way to do this
+            nodes.erase(nodes.begin() + i);
+            continue;
+        }
     }
 }
 
