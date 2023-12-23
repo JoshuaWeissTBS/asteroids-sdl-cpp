@@ -8,6 +8,14 @@
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
+Player *player = NULL;
+
+Vector2 asteroid_spawn_points[4] = {
+    {0, 0},
+    {0, 1080},
+    {1920, 0},
+    {1920, 1080},
+};
 
 Game::Game()
 {
@@ -78,6 +86,12 @@ int Game::init(bool fullscreen)
 
     glViewport(0, 0, 1920, 1080);
 
+
+    // Create player
+    // TODO: Move this to a level loader
+    player = new Player(Vector2(1920/2, 1080/2), 65, 65);
+    nodes.push_back(player);
+
     return 0;
 }
 
@@ -110,13 +124,19 @@ void Game::input()
         }
         if (state[SDL_SCANCODE_SPACE])
         {
-            Player *player = new Player(Vector2(0, 0), 65, 65);
-
-            nodes.push_back(player);
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
-            Asteroid *asteroid = new Asteroid(Vector2(500, 500), 100, 100);
+            // Pick random spawn point
+            int spawn_point_index = rand() % 4;
+
+            Asteroid *asteroid = new Asteroid(Vector2(asteroid_spawn_points[spawn_point_index].x, asteroid_spawn_points[spawn_point_index].y), 100, 100);
+
+            // Direction to player
+            Vector2 direction = asteroid->position.direction_to(player->position);
+
+            asteroid->velocity.x = direction.x * 5;
+            asteroid->velocity.y = direction.y * 5;
 
             nodes.push_back(asteroid);
         }

@@ -26,6 +26,11 @@ public:
     /// @brief Returns a normalized copy of the vector
     /// @return A normalized copy of the vector
     Vector2 normalized();
+
+    /// @brief Gets direction from this vector to the given target
+    /// @param target The target vector
+    /// @return The normalized vector direction to the given target
+    Vector2 direction_to(Vector2 target);
 };
 
 #endif // Vector2_HPP
