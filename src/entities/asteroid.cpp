@@ -1,5 +1,6 @@
 #include "asteroid.hpp"
 #include "game.hpp"
+#include "util.hpp"
 
 Asteroid::Asteroid(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
@@ -13,5 +14,16 @@ void Asteroid::input(SDL_Event *event)
     case SDL_MOUSEBUTTONDOWN:
         cout << "Asteroid clicked" << endl;
         break;
+    }
+}
+
+void Asteroid::physics_process(float delta)
+{
+    this->rotation_degrees += 1;
+    move();
+
+    if (Util::check_collision(this->collider, player->collider))
+    {
+        cout << "Asteroid collided with player" << endl;
     }
 }

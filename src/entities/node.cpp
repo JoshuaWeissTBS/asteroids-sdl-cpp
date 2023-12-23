@@ -13,6 +13,11 @@ Node::Node(Vector2 position, int width, int height, int rotation_degrees = 0)
     this->height = height;
     this->rotation_degrees = rotation_degrees;
     this->velocity = Vector2(0, 0);
+
+    collider.x = position.x;
+    collider.y = position.y;
+    collider.w = width;
+    collider.h = height;
 }
 
 Node::~Node()
@@ -48,6 +53,8 @@ void Node::move()
 {
     position.x += velocity.x;
     position.y += velocity.y;
+    collider.x = position.x;
+    collider.y = position.y;
 }
 
 void Node::set_sprite_size(int width, int height)

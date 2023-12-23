@@ -149,7 +149,6 @@ void Game::update(float delta)
     for (int i = 0; i < nodes.size(); i++)
     {
         nodes[i]->physics_process(delta);
-        nodes[i]->move();
     }
 }
 

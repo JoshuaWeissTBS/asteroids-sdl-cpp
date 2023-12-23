@@ -5,11 +5,13 @@
 #include <iostream>
 #include "node.hpp"
 #include <vector>
+#include "player.hpp"
 
 using namespace std;
 
 extern SDL_Renderer *renderer;
 extern SDL_Window *screen_window;
+extern Player *player;
 class Game {
 public:
     // Constructor
