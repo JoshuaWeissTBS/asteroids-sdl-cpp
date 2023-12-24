@@ -9,7 +9,7 @@ using namespace std;
 
 class Player : public Node {
 public:
-    Player(Vector2 position, int width, int height, int rotation_degrees = 0);
+    Player(Vector2 position, int width, int height, double rotation_degrees = 0);
 
     int max_speed = 10;
     int acceleration = 20;

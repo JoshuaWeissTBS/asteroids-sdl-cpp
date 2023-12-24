@@ -30,3 +30,7 @@ Vector2 Vector2::direction_to(Vector2 target) {
     Vector2 direction = Vector2(target.x - x, target.y - y);
     return direction.normalized();
 }
+
+double Vector2::angle() {
+    return atan2(y, x) * (180 / M_PI);
+}

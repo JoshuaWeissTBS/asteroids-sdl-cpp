@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Node::Node(Vector2 position, int width, int height, int rotation_degrees = 0)
+Node::Node(Vector2 position, int width, int height, double rotation_degrees = 0)
 {
     // TODO: Do I need to check if position is out of bounds?
     this->position = position;

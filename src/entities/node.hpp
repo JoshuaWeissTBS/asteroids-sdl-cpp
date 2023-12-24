@@ -12,7 +12,7 @@ using namespace std;
 class Node {
 public:
     // Constructor
-    Node(Vector2 position, int width, int height, int rotation_degrees);
+    Node(Vector2 position, int width, int height, double rotation_degrees);
 
     // Destructor
     ~Node();

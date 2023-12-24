@@ -5,6 +5,7 @@
 #include "entities/asteroid.cpp"
 #include "vector2.cpp"
 #include "entities/player.cpp"
+#include "entities/bullet.cpp"
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
@@ -124,6 +125,23 @@ void Game::input()
         }
         if (state[SDL_SCANCODE_SPACE])
         {
+            // Shoot 2 bullet from player ship guns
+            Vector2 direction = player->get_direction().rotated(-(M_PI / 2));
+
+            Vector2 bullet_position = { player->position.x, player->position.y };
+            Vector2 bullet_position2 = { player->position.x + 50, player->position.y };
+        
+            Bullet *bullet = new Bullet(bullet_position, player->rotation_degrees);
+            Bullet *bullet2 = new Bullet(bullet_position2, player->rotation_degrees);
+
+            bullet->velocity.x = direction.x * bullet->speed;
+            bullet->velocity.y = direction.y * bullet->speed;
+
+            bullet2->velocity.x = direction.x * bullet2->speed;
+            bullet2->velocity.y = direction.y * bullet2->speed;
+
+            nodes.push_back(bullet);
+            nodes.push_back(bullet2);
         }
         if (state[SDL_SCANCODE_RIGHT])
         {

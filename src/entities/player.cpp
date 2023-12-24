@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "util.hpp"
 
-Player::Player(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
+Player::Player(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     set_sprite("assets/img/spaceship.bmp");
     set_sprite_size(width, height);

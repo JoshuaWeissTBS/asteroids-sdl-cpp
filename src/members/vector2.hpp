@@ -31,6 +31,10 @@ public:
     /// @param target The target vector
     /// @return The normalized vector direction to the given target
     Vector2 direction_to(Vector2 target);
+
+    /// @brief Get angle of this vector in degrees
+    /// @return The angle of this vector in degrees
+    double angle();
 };
 
 #endif // Vector2_HPP
