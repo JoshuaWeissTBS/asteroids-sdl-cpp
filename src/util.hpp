@@ -27,6 +27,16 @@ public:
     /// @param b The second SDL_Rect
     /// @return true if the two rects are colliding, false otherwise
     static bool check_collision(SDL_Rect a, SDL_Rect b);
+
+    /// @brief Converts degrees to radians
+    /// @param degrees The degrees to convert
+    /// @return The radians
+    static float degrees_to_radians(float degrees);
+
+    /// @brief Converts radians to degrees
+    /// @param radians The radians to convert
+    /// @return The degrees
+    static float radians_to_degrees(float radians);
 };
 
 #endif // UTIL_HPP

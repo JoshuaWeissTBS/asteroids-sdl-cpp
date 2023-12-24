@@ -16,6 +16,15 @@ Vector2 Vector2::rotated(float radians) {
     return Vector2(x2, y2);
 }
 
+Vector2 Vector2::rotated_around_anchor(float radians, Vector2 anchor) {
+    float distance = distance_to(anchor);
+    return Vector2((distance * cos(radians) + anchor.x), (distance * sin(radians)) + anchor.y);
+}
+
+double Vector2::distance_to(Vector2 target) {
+    return sqrt(pow(target.x - x, 2) + pow(target.y - y, 2));
+}
+
 float Vector2::length() {
     return sqrt((x * x) + (y * y));
 }

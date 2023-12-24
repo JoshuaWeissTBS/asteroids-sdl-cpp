@@ -125,11 +125,13 @@ void Game::input()
         }
         if (state[SDL_SCANCODE_SPACE])
         {
+            // TODO: shoot should be a method on player
             // Shoot 2 bullet from player ship guns
             Vector2 direction = player->get_direction().rotated(-(M_PI / 2));
 
-            Vector2 bullet_position = { player->position.x, player->position.y };
-            Vector2 bullet_position2 = { player->position.x + 50, player->position.y };
+            // TODO: shouldn't really access bullet spawn points like this
+            Vector2 bullet_position = player->children[0]->get_global_position();
+            Vector2 bullet_position2 = player->children[1]->get_global_position();
         
             Bullet *bullet = new Bullet(bullet_position, player->rotation_degrees);
             Bullet *bullet2 = new Bullet(bullet_position2, player->rotation_degrees);

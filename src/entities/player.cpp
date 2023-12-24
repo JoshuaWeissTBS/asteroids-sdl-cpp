@@ -6,6 +6,10 @@ Player::Player(Vector2 position, int width, int height, double rotation_degrees)
 {
     set_sprite("assets/img/spaceship.bmp");
     set_sprite_size(width, height);
+
+    // 2 Nodes are added to the player, one for each bullet spawn point
+    add_child(new Node(Vector2(10, 10), 0, 0, 0));
+    add_child(new Node(Vector2(50, 20), 0, 0, 0));
 }
 
 void Player::input(SDL_Event *event)

@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include "vector2.hpp"
 #include "texture.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -17,11 +18,15 @@ public:
     // Destructor
     ~Node();
 
+    /// @brief The position of the node relative to its parent
     Vector2 position;
     Vector2 velocity;
     double rotation_degrees;
     int width;
     int height;
+    Node* parent = NULL;
+    vector<Node*> children = {};
+
     // If true, the node will be deleted at the end of the frame
     bool marked_for_deletion = false;
 
@@ -36,6 +41,10 @@ public:
     /// @return Vector2
     Vector2 get_direction();
 
+    /// @brief Gets the global position of the node
+    /// @return Vector2
+    Vector2 get_global_position();
+
     /// @brief Sets the sprite of the node (texture internally)
     /// @param path The path to the image file
     void set_sprite(const char * path);
@@ -45,7 +54,11 @@ public:
     /// @param height 
     void set_sprite_size(int width, int height);
 
-    /// @brief Updates the position of the node based on its velocity
+    /// @brief Add child node to this node
+    /// @param node
+    void add_child(Node *node);
+
+    /// @brief Updates the position of the node based on its velocity, recursively calls move() on all children
     void move();
 
     /// @brief Renders the node to the screen, called once per frame after move() and other properties have been updated
@@ -54,6 +67,8 @@ public:
     SDL_Rect collider;
 private:
     Texture *texture = NULL;
+    /// @brief The position of the node relative to the screen
+    Vector2 global_position = { 0, 0 };
 };
 
 #endif

@@ -80,12 +80,14 @@ void Texture::set_size(int width, int height)
 
 void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *center, SDL_RendererFlip flip)
 {
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderDrawPoint(renderer, x, y);
     if (texture == NULL) {
         // TODO: Throw an error instead of printing to stdout
         printf("Cannot render texture, texture is NULL\n");
         return;
     }
-    // Set rendering space and render to screen
+    // // Set rendering space and render to screen
     SDL_Rect render_quad = {x, y, width, height};
 
     // Set clip rendering dimensions
