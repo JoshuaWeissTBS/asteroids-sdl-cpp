@@ -35,20 +35,9 @@ void Player::physics_process(float delta)
         velocity.x = Util::move_toward(velocity.x, 0, abs(normalized.x) * deceleration * delta);
     }
 
-    if (velocity.x > max_speed) {
-        velocity.x = max_speed;
-    }
-
-    if (velocity.x < -max_speed) {
-        velocity.x = -max_speed;
-    }
-
-    if (velocity.y > max_speed) {
-        velocity.y = max_speed;
-    }
-
-    if (velocity.y < -max_speed) {
-        velocity.y = -max_speed;
+    double length = velocity.length();
+    if (length > max_speed) {
+        velocity = velocity.normalized() * max_speed;
     }
 
     move();

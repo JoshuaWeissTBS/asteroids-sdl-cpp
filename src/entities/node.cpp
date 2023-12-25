@@ -104,7 +104,7 @@ void Node::render()
     // TODO: Throw an error instead of printing to stdout
     if (texture == NULL)
     {
-        printf("Cannot render node, texture is NULL\n");
+        // printf("Cannot render node, texture is NULL\n");
         return;
     }
 

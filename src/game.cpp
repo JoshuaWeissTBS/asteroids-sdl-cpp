@@ -117,13 +117,8 @@ void Game::input()
             break;
         }
 
-        // Keyboard inputs
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        if (state[SDL_SCANCODE_ESCAPE])
-        {
-            running = false;
-        }
-        if (state[SDL_SCANCODE_SPACE])
+        // check space just pushed down
+        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
         {
             // TODO: shoot should be a method on player
             // Shoot 2 bullet from player ship guns
@@ -144,6 +139,18 @@ void Game::input()
 
             nodes.push_back(bullet);
             nodes.push_back(bullet2);
+        }
+
+
+        // Keyboard inputs
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_ESCAPE])
+        {
+            running = false;
+        }
+        if (state[SDL_SCANCODE_SPACE])
+        {
+            
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
@@ -174,6 +181,7 @@ void Game::update(float delta)
             delete nodes[i];
             // TODO: PERFORMANCE: erase is expensive, find a better way to do this
             nodes.erase(nodes.begin() + i);
+            cout << "Node deleted" << endl;
             continue;
         }
     }

@@ -1,7 +1,7 @@
 #include "vector2.hpp"
 
 
-Vector2::Vector2(float x, float y) {
+Vector2::Vector2(double x, double y) {
     this->x = x;
     this->y = y;
 }
@@ -9,14 +9,14 @@ Vector2::Vector2(float x, float y) {
 Vector2::~Vector2() {
 }
 
-Vector2 Vector2::rotated(float radians) {
-    float x2 = x * cos(radians) - y * sin(radians);
-    float y2 = x * sin(radians) + y * cos(radians);
+Vector2 Vector2::rotated(double radians) {
+    double x2 = x * cos(radians) - y * sin(radians);
+    double y2 = x * sin(radians) + y * cos(radians);
 
     return Vector2(x2, y2);
 }
 
-Vector2 Vector2::rotated_around_anchor(float radians, Vector2 anchor) {
+Vector2 Vector2::rotated_around_anchor(double radians, Vector2 anchor) {
     Vector2 translated = Vector2(x - anchor.x, y - anchor.y);
     Vector2 rotated = translated.rotated(radians);
     Vector2 translated_back = Vector2(rotated.x + anchor.x, rotated.y + anchor.y);
@@ -27,7 +27,7 @@ double Vector2::distance_to(Vector2 target) {
     return sqrt(pow(target.x - x, 2) + pow(target.y - y, 2));
 }
 
-float Vector2::length() {
+double Vector2::length() {
     return sqrt((x * x) + (y * y));
 }
 
@@ -44,4 +44,36 @@ Vector2 Vector2::direction_to(Vector2 target) {
 
 double Vector2::angle() {
     return atan2(y, x) * (180 / M_PI);
+}
+
+Vector2 Vector2::operator+(double scalar) {
+    return Vector2(x + scalar, y + scalar);
+}
+
+Vector2 Vector2::operator-(double scalar) {
+    return Vector2(x - scalar, y - scalar);
+}
+
+Vector2 Vector2::operator*(double scalar) {
+    return Vector2(x * scalar, y * scalar);
+}
+
+Vector2 Vector2::operator/(double scalar) {
+    return Vector2(x / scalar, y / scalar);
+}
+
+Vector2 Vector2::operator+(Vector2 other) {
+    return Vector2(x + other.x, y + other.y);
+}
+
+Vector2 Vector2::operator-(Vector2 other) {
+    return Vector2(x - other.x, y - other.y);
+}
+
+Vector2 Vector2::operator*(Vector2 other) {
+    return Vector2(x * other.x, y * other.y);
+}
+
+Vector2 Vector2::operator/(Vector2 other) {
+    return Vector2(x / other.x, y / other.y);
 }

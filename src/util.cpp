@@ -103,3 +103,19 @@ float Util::radians_to_degrees(float radians)
 {
     return radians * (180 / M_PI);
 }
+
+double Util::clamp (double value, double min, double max)
+{
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    else
+    {
+        return value;
+    }
+}
