@@ -2,6 +2,7 @@
 #include "vector2.hpp"
 #include "texture.hpp"
 #include <iostream>
+
 #include "util.hpp"
 
 using namespace std;
@@ -15,8 +16,8 @@ Node::Node(Vector2 position, int width, int height, double rotation_degrees = 0)
     this->rotation_degrees = rotation_degrees;
     this->velocity = Vector2(0, 0);
 
-    collider.x = position.x;
-    collider.y = position.y;
+    collider.x = position.x - (width / 2);
+    collider.y = position.y - (height / 2);
     collider.w = width;
     collider.h = height;
 }
@@ -84,8 +85,8 @@ void Node::move()
         global_position.y = position.y;
     }
 
-    collider.x = global_position.x;
-    collider.y = global_position.y;
+    collider.x = global_position.x - (width / 2);
+    collider.y = global_position.y - (height / 2);
 
     for (int i = 0; i < children.size(); i++)
     {

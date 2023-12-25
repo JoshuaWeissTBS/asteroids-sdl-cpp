@@ -87,8 +87,10 @@ void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *cent
         printf("Cannot render texture, texture is NULL\n");
         return;
     }
-    // // Set rendering space and render to screen
-    SDL_Rect render_quad = {x, y, width, height};
+
+    // TODO: FEATURE: Param to offset render position/anchor point/ center of rotation
+    // Set rendering space and render to screen
+    SDL_Rect render_quad = {x - width / 2, y - height / 2, width, height};
 
     // Set clip rendering dimensions
     if (clip != NULL) {
