@@ -93,3 +93,29 @@ bool Util::check_collision(SDL_Rect a, SDL_Rect b)
     // If none of the sides from A are outside B
     return true;
 }
+
+float Util::degrees_to_radians(float degrees)
+{
+    return degrees * (M_PI / 180);
+}
+
+float Util::radians_to_degrees(float radians)
+{
+    return radians * (180 / M_PI);
+}
+
+double Util::clamp (double value, double min, double max)
+{
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    else
+    {
+        return value;
+    }
+}

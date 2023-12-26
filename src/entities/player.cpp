@@ -1,11 +1,16 @@
 #include "player.hpp"
-#include "game.hpp"
 #include "util.hpp"
+#include "game.hpp"
+#include "bullet.hpp"
 
-Player::Player(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
+Player::Player(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     set_sprite("assets/img/spaceship.bmp");
     set_sprite_size(width, height);
+
+    // 2 Nodes are added to the player, one for each bullet spawn point
+    add_child(new Node(Vector2(-21, -11), 0, 0, 0));
+    add_child(new Node(Vector2(21, -11), 0, 0, 0));
 }
 
 void Player::input(SDL_Event *event)
@@ -31,20 +36,16 @@ void Player::physics_process(float delta)
         velocity.x = Util::move_toward(velocity.x, 0, abs(normalized.x) * deceleration * delta);
     }
 
-    if (velocity.x > max_speed) {
-        velocity.x = max_speed;
+    double length = velocity.length();
+    if (length > max_speed) {
+        velocity = velocity.normalized() * max_speed;
     }
 
-    if (velocity.x < -max_speed) {
-        velocity.x = -max_speed;
-    }
-
-    if (velocity.y > max_speed) {
-        velocity.y = max_speed;
-    }
-
-    if (velocity.y < -max_speed) {
-        velocity.y = -max_speed;
+    // Keyboard inputs
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_SPACE])
+    {
+        _shoot();
     }
 
     move();
@@ -67,4 +68,27 @@ Vector2 Player::_get_move_input_direction()
         direction.x += 1;
     }
     return direction;
+}
+
+void Player::_shoot()
+{
+    // TODO: shoot should be a method on player
+    // Shoot 2 bullet from player ship guns
+    Vector2 direction = player->get_direction().rotated(-(M_PI / 2));
+
+    // TODO: shouldn't really access bullet spawn points like this
+    Vector2 bullet_position = player->children[0]->get_global_position();
+    Vector2 bullet_position2 = player->children[1]->get_global_position();
+
+    Bullet *bullet = new Bullet(bullet_position, player->rotation_degrees);
+    Bullet *bullet2 = new Bullet(bullet_position2, player->rotation_degrees);
+
+    bullet->velocity.x = direction.x * bullet->speed;
+    bullet->velocity.y = direction.y * bullet->speed;
+
+    bullet2->velocity.x = direction.x * bullet2->speed;
+    bullet2->velocity.y = direction.y * bullet2->speed;
+
+    parent->add_child(bullet);
+    parent->add_child(bullet2);
 }

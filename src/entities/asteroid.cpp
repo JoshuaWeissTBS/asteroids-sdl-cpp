@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "util.hpp"
 
-Asteroid::Asteroid(Vector2 position, int width, int height, int rotation_degrees) : Node(position, width, height, rotation_degrees)
+Asteroid::Asteroid(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     this->set_sprite("assets/img/asteroid.bmp");
     this->set_sprite_size(width, height);

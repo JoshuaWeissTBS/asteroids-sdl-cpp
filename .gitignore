@@ -31,3 +31,53 @@
 *.out
 *.app
 *main
+
+# Ignore build directory
+/build/
+src/build
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+*.cmake
+Makefile
+
+# Ignore compiled object files
+*.o
+*.so
+*.ko
+*.dll
+*.d
+
+# Ignore executables
+*.exe
+*.out
+*.app
+
+# Ignore IDE/project files
+.idea/
+*.swp
+*.swo
+*.swn
+*.xcodeproj
+*.vscode/
+
+# Ignore other generated files
+*.log
+*.tar.*
+*.gz
+*.bzip2
+*.zip
+*.7z
+*.dmg
+*.iso
+*.rar
+
+# Ignore OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

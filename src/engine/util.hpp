@@ -27,6 +27,22 @@ public:
     /// @param b The second SDL_Rect
     /// @return true if the two rects are colliding, false otherwise
     static bool check_collision(SDL_Rect a, SDL_Rect b);
+
+    /// @brief Converts degrees to radians
+    /// @param degrees The degrees to convert
+    /// @return The radians
+    static float degrees_to_radians(float degrees);
+
+    /// @brief Converts radians to degrees
+    /// @param radians The radians to convert
+    /// @return The degrees
+    static float radians_to_degrees(float radians);
+
+    /// @brief Clamps a value between a minimum and maximum value
+    /// @param value The value to clamp
+    /// @param min The minimum value
+    /// @param max The maximum value
+    static double clamp (double value, double min, double max);
 };
 
 #endif // UTIL_HPP

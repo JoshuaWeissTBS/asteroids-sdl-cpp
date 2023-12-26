@@ -20,6 +20,7 @@ bool Texture::load_from_file (const char *path)
     if (loaded_surface == NULL) {
         // TODO: throw error instead of printing to stdout
         printf("Unable to load image, likely the path is incorrect %s | SDL Error: %s\n", path, SDL_GetError());
+        printf("Current working directory: %s\n", SDL_GetBasePath());
         return false;
     }
 
@@ -85,8 +86,10 @@ void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *cent
         printf("Cannot render texture, texture is NULL\n");
         return;
     }
+
+    // TODO: FEATURE: Param to offset render position/anchor point/ center of rotation
     // Set rendering space and render to screen
-    SDL_Rect render_quad = {x, y, width, height};
+    SDL_Rect render_quad = {x - width / 2, y - height / 2, width, height};
 
     // Set clip rendering dimensions
     if (clip != NULL) {

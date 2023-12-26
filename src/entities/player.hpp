@@ -9,7 +9,7 @@ using namespace std;
 
 class Player : public Node {
 public:
-    Player(Vector2 position, int width, int height, int rotation_degrees = 0);
+    Player(Vector2 position, int width, int height, double rotation_degrees = 0);
 
     int max_speed = 10;
     int acceleration = 20;
@@ -21,6 +21,9 @@ private:
     /// @brief Checks movement input and returns a vector2 representing the direction to move
     /// @return Vector2 representing the direction to move
     Vector2 _get_move_input_direction();
+
+    /// @brief Shoots a bullet from the player ship
+    void _shoot();
 };
 
 #endif
