@@ -4,6 +4,8 @@
 
 Bullet::Bullet(Vector2 position, double rotation_degrees) : Node(position, 16, 16, rotation_degrees)
 {
+    name = "Bullet";
+
     this->set_sprite("assets/img/bullet.bmp");
     this->set_sprite_size(width, height);
 }

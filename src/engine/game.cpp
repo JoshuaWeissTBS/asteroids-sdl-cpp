@@ -92,6 +92,9 @@ int Game::init(bool fullscreen)
     player = new Player(Vector2(1920/2, 1080/2), 65, 65);
     root_node->add_child(player);
 
+    Asteroid *asteroid = new Asteroid(Vector2(800, 800), 100, 100);
+    root_node->add_child(asteroid);
+
     return 0;
 }
 
@@ -137,6 +140,15 @@ void Game::input()
 void Game::update(float delta)
 {
     root_node->_physics_process(delta);
+
+    // Update collision table
+    collisions = Util::get_collisions(root_node->get_all_nodes());
+
+    // COUt collisions
+    for (int i = 0; i < collisions.size(); i++)
+    {
+        cout << collisions[i][0]->name << " collided with " << collisions[i][1]->name << endl;
+    }
 }
 
 void Game::draw()

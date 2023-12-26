@@ -1,6 +1,8 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 #include <SDL2/SDL.h>
+#include <unordered_map>
+#include "node.hpp"
 
 using namespace std;
 
@@ -43,6 +45,11 @@ public:
     /// @param min The minimum value
     /// @param max The maximum value
     static double clamp (double value, double min, double max);
+
+    /// @brief Checks collisions between nodes and returns a vector of collided nodes
+    /// @param nodes The nodes to check collisions between
+    /// @return A vector of collided nodes
+    static vector<vector<Node*>> get_collisions(vector<Node*> nodes);
 };
 
 #endif // UTIL_HPP

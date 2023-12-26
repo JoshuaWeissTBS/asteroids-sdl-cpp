@@ -5,12 +5,19 @@
 
 Player::Player(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
+    name = "Player";
     set_sprite("assets/img/spaceship.bmp");
     set_sprite_size(width, height);
 
     // 2 Nodes are added to the player, one for each bullet spawn point
-    add_child(new Node(Vector2(-21, -11), 0, 0, 0));
-    add_child(new Node(Vector2(21, -11), 0, 0, 0));
+    Node *left_bullet_spawn = new Node(Vector2(-21, -11), 0, 0, 0);
+    Node *right_bullet_spawn = new Node(Vector2(21, -11), 0, 0, 0);
+
+    left_bullet_spawn->name = "Left Bullet Spawn";
+    right_bullet_spawn->name = "Right Bullet Spawn";
+
+    add_child(left_bullet_spawn);
+    add_child(right_bullet_spawn);
 }
 
 void Player::input(SDL_Event *event)

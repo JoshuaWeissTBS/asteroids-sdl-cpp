@@ -1,5 +1,6 @@
 #include "util.hpp"
 #include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -118,4 +119,60 @@ double Util::clamp (double value, double min, double max)
     {
         return value;
     }
+}
+
+vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
+{
+    vector<vector<Node*>> possible_collisions;
+    
+    // Sweep and prune algorithm
+    // Sort nodes by x position
+    sort(nodes.begin(), nodes.end(), [](Node* a, Node* b) {
+        return a->get_global_position().x < b->get_global_position().x;
+    });
+
+    // Iterate through nodes and check for possible collisions
+    // If the distance between two nodes is less than the sum of their widths, they are possible collisions
+
+    vector<Node*> possible_collisions_for_node;
+    for (int i = 0; i < nodes.size(); i++)
+    {
+
+        if (i == 0)
+        {
+            possible_collisions_for_node.push_back(nodes[i]);
+        }
+        else
+        {
+            if (nodes[i]->get_global_position().x - nodes[i - 1]->get_global_position().x < nodes[i]->width + nodes[i - 1]->height) {
+                possible_collisions_for_node.push_back(nodes[i]);
+            } else {
+                possible_collisions.push_back(possible_collisions_for_node);
+                possible_collisions_for_node.clear();
+                possible_collisions_for_node.push_back(nodes[i]);
+            }
+        }
+    }
+    possible_collisions.push_back(possible_collisions_for_node);
+
+    // Iterate through possible collisions and check for actual collisions
+    vector<vector<Node*>> collisions;
+
+    for (int i = 0; i < possible_collisions.size(); i++)
+    {
+        for (int j = 0; j < possible_collisions[i].size(); j++)
+        {
+            for (int k = j + 1; k < possible_collisions[i].size(); k++)
+            {
+                // TODO: PERFORMANCE: Could be cheaper by only checking if y axis is colliding
+                if (Util::check_collision(possible_collisions[i][j]->collider, possible_collisions[i][k]->collider))
+                {
+                    vector<Node*> collision = {possible_collisions[i][j], possible_collisions[i][k]};
+                    collisions.push_back(collision);
+                }
+            }
+        }
+    }
+
+    return collisions;
 }

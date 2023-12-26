@@ -4,6 +4,7 @@
 #include "vector2.hpp"
 #include "texture.hpp"
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
     // Destructor
     ~Node();
 
+    string name = "Node";
     /// @brief The position of the node relative to its parent
     Vector2 position;
     Vector2 velocity;
@@ -71,6 +73,10 @@ public:
 
     /// @brief Renders the node to the screen, called once per frame after move() and other properties have been updated
     void render();
+
+    /// @brief Gets all children nodes recursively and returns them in a vector
+    /// @return the vector of nodes
+    vector<Node*> get_all_nodes();
 
     SDL_Rect collider;
 private:

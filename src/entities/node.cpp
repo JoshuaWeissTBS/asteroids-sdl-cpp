@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "util.hpp"
+#include "game.hpp"
 
 using namespace std;
 
@@ -128,6 +129,10 @@ void Node::render()
         return;
     }
 
+    // render collider
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderDrawRect(renderer, &collider);
+
     texture->render(global_position.x, global_position.y, NULL, rotation_degrees);
 }
 
@@ -148,4 +153,19 @@ void Node::_physics_process(float delta)
             continue;
         }
     }
+}
+
+vector<Node*> Node::get_all_nodes()
+{
+    vector<Node*> nodes = {};
+
+    nodes.push_back(this);
+
+    for (int i = 0; i < children.size(); i++)
+    {
+        vector<Node*> child_nodes = children[i]->get_all_nodes();
+        nodes.insert(nodes.end(), child_nodes.begin(), child_nodes.end());
+    }
+
+    return nodes;
 }
