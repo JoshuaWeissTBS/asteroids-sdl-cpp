@@ -90,9 +90,6 @@ void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *cent
     // TODO: FEATURE: Param to offset render position/anchor point/ center of rotation
     // Set rendering space and render to screen
     SDL_Rect render_quad = {x - width / 2, y - height / 2, width, height};
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
-    SDL_RenderDrawPoint(renderer, x, y);
-    SDL_RenderDrawRect(renderer, &render_quad);
 
     // Set clip rendering dimensions
     if (clip != NULL) {
