@@ -21,6 +21,9 @@ private:
     /// @brief Checks movement input and returns a vector2 representing the direction to move
     /// @return Vector2 representing the direction to move
     Vector2 _get_move_input_direction();
+
+    /// @brief Shoots a bullet from the player ship
+    void _shoot();
 };
 
 #endif

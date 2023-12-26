@@ -1,11 +1,10 @@
 #include "game.hpp"
 #include "util.hpp"
-#include "sdl_components/texture.hpp"
-#include "entities/node.cpp"
-#include "entities/asteroid.cpp"
-#include "vector2.cpp"
-#include "entities/player.cpp"
-#include "entities/bullet.cpp"
+#include "texture.hpp"
+#include "node.hpp"
+#include "asteroid.hpp"
+#include "vector2.hpp"
+#include "player.hpp"
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
@@ -91,7 +90,7 @@ int Game::init(bool fullscreen)
     // Create player
     // TODO: Move this to a level loader
     player = new Player(Vector2(1920/2, 1080/2), 65, 65);
-    nodes.push_back(player);
+    root_node->add_child(player);
 
     return 0;
 }
@@ -101,44 +100,13 @@ void Game::input()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        // Handle input for all nodes
-        for (int i = 0; i < nodes.size(); i++)
-        {
-            nodes[i]->input(&event);
-        }
+        root_node->_input(&event);
 
         switch (event.type)
         {
-        case SDL_QUIT:
-            running = false;
-            break;
-        case SDL_MOUSEMOTION:
-            _on_mouse_move(event.motion.x, event.motion.y);
-            break;
-        }
-
-        // check space just pushed down
-        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
-        {
-            // TODO: shoot should be a method on player
-            // Shoot 2 bullet from player ship guns
-            Vector2 direction = player->get_direction().rotated(-(M_PI / 2));
-
-            // TODO: shouldn't really access bullet spawn points like this
-            Vector2 bullet_position = player->children[0]->get_global_position();
-            Vector2 bullet_position2 = player->children[1]->get_global_position();
-        
-            Bullet *bullet = new Bullet(bullet_position, player->rotation_degrees);
-            Bullet *bullet2 = new Bullet(bullet_position2, player->rotation_degrees);
-
-            bullet->velocity.x = direction.x * bullet->speed;
-            bullet->velocity.y = direction.y * bullet->speed;
-
-            bullet2->velocity.x = direction.x * bullet2->speed;
-            bullet2->velocity.y = direction.y * bullet2->speed;
-
-            nodes.push_back(bullet);
-            nodes.push_back(bullet2);
+            case SDL_QUIT:
+                running = false;
+                break;
         }
 
 
@@ -147,10 +115,6 @@ void Game::input()
         if (state[SDL_SCANCODE_ESCAPE])
         {
             running = false;
-        }
-        if (state[SDL_SCANCODE_SPACE])
-        {
-            
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
@@ -165,35 +129,19 @@ void Game::input()
             asteroid->velocity.x = direction.x * 5;
             asteroid->velocity.y = direction.y * 5;
 
-            nodes.push_back(asteroid);
+            root_node->add_child(asteroid);
         }
     }
 }
 
 void Game::update(float delta)
 {
-    // Loop through all nodes and update their properties
-    for (int i = 0; i < nodes.size(); i++)
-    {
-        nodes[i]->physics_process(delta);
-        if (nodes[i]->marked_for_deletion)
-        {
-            delete nodes[i];
-            // TODO: PERFORMANCE: erase is expensive, find a better way to do this
-            nodes.erase(nodes.begin() + i);
-            cout << "Node deleted" << endl;
-            continue;
-        }
-    }
+    root_node->_physics_process(delta);
 }
 
 void Game::draw()
 {
-    // Loop through all nodes and render them
-    for (int i = 0; i < nodes.size(); i++)
-    {
-        nodes[i]->render();
-    }
+    root_node->render();
 
     // SDL_UpdateWindowSurface(screen_window);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -203,11 +151,7 @@ void Game::draw()
 
 void Game::cleanup()
 {
-    // Delete all nodes
-    for (int i = 0; i < nodes.size(); i++)
-    {
-        delete nodes[i];
-    }
+    // TODO: Delete all nodes
 
     SDL_GL_DeleteContext(gl_context);
     gl_context = NULL;
@@ -220,34 +164,4 @@ void Game::cleanup()
     renderer = NULL;
 
     SDL_Quit();
-}
-
-void Game::_on_mouse_move(int x, int y)
-{
-    SDL_LockSurface(screen_surface);
-
-    // Set pixel color at mouse position
-    Uint32 *pixels = (Uint32 *)screen_surface->pixels;
-
-    int radius = 50;
-
-    for (int i = 0; i < radius; i++)
-    {
-        for (int j = -radius; j < radius; j++)
-        {
-            int top_pixel = (y - i) * screen_surface->w + x + j;
-            if (!Util::pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y - i))
-            {
-                pixels[top_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
-            }
-
-            int bot_pixel = (y + i) * screen_surface->w + x + j;
-            if (!Util::pixel_out_of_bounds(screen_surface->w, screen_surface->h, x + j, y + i))
-            {
-                pixels[bot_pixel] = SDL_MapRGB(screen_surface->format, x % 255, y % 255, x + y % 255);
-            }
-        }
-    };
-
-    SDL_UnlockSurface(screen_surface);
 }

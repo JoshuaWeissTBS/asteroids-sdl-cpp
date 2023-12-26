@@ -30,6 +30,21 @@ void Node::input(SDL_Event *event)
 {
 }
 
+// Should not be overridden
+void Node::_input(SDL_Event *event)
+{
+    // Handle input for all nodes
+    for (int i = 0; i < children.size(); i++)
+    {
+        children[i]->_input(event);
+    }
+    input(event);
+}
+
+void Node::physics_process(float delta)
+{
+}
+
 void Node::set_sprite(const char *path)
 {
     if (texture == NULL)
@@ -101,6 +116,11 @@ Vector2 Node::get_global_position()
 
 void Node::render()
 {
+    for (int i = 0; i < children.size(); i++)
+    {
+        children[i]->render();
+    }
+
     // TODO: Throw an error instead of printing to stdout
     if (texture == NULL)
     {
@@ -109,12 +129,23 @@ void Node::render()
     }
 
     texture->render(global_position.x, global_position.y, NULL, rotation_degrees);
-    for (int i = 0; i < children.size(); i++)
-    {
-        children[i]->render();
-    }
 }
 
-void Node::physics_process(float delta)
+void Node::_physics_process(float delta)
 {
+    // TODO: handle deletion
+    // Handle physics process for all nodes
+    physics_process(delta);
+    for (int i = 0; i < children.size(); i++)
+    {
+        children[i]->_physics_process(delta);
+
+        if (children[i]->marked_for_deletion)
+        {
+            delete children[i];
+            // TODO: PERFORMANCE: erase is expensive, find a better way to do this
+            children.erase(children.begin() + i);
+            continue;
+        }
+    }
 }

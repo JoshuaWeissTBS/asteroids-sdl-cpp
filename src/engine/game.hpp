@@ -26,7 +26,7 @@ public:
     int max_fps = 60;
     int width = 1920;
     int height = 1080;
-    vector<Node*> nodes; // Would prefer not to use STD
+    Node* root_node = new Node(Vector2(0, 0), 0, 0, 0);
     SDL_Surface *screen_surface;
     SDL_GLContext gl_context;
     int init(bool fullscreen);
@@ -35,10 +35,6 @@ public:
     void update(float delta);
     void draw();
     void cleanup();
-    
-private:
-    void _on_mouse_move(int x, int y);
-
 };
 
 #endif // GAME_HPP

@@ -33,9 +33,17 @@ public:
     /// @brief Handles input
     virtual void input(SDL_Event *event);
 
+    /// @brief Input that is called by parent nodes once per frame, which invokes input() on all children. Called in a bottom-top approach. Should not be overriden.
+    /// @param event
+    void _input(SDL_Event *event);
+
     /// @brief Called once per frame, meant to be overridden by child classes
     /// @param delta
     virtual void physics_process(float delta);
+
+    /// @brief Physics process that is called by parent nodes once per frame, which invokes physics_process() on all children. Called in a top-bottom approach. Should not be overriden. 
+    /// @param delta
+    void _physics_process(float delta);
 
     /// @brief Gets the direction the node is facing as a Vector2
     /// @return Vector2
