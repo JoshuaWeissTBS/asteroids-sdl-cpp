@@ -34,7 +34,7 @@
 
 # Ignore build directory
 /build/
-
+src/build
 # Ignore CMake generated files
 CMakeCache.txt
 CMakeFiles/
