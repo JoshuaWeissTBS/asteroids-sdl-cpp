@@ -15,7 +15,8 @@ void Bullet::physics_process(float delta)
 
     // If the bullet is off screen, mark it for deletion
     // TODO: window size
-    if (position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
+    Vector2 global_position = get_global_position();
+    if (global_position.x < 0 || global_position.x > 1920 || global_position.y < 0 || global_position.y > 1080)
     {
         marked_for_deletion = true;
     }
