@@ -95,6 +95,35 @@ bool Util::check_collision(SDL_Rect a, SDL_Rect b)
     return true;
 }
 
+bool Util::check_y_axis_collision(SDL_Rect a, SDL_Rect b)
+{
+    // The sides of the rectangles
+    int top_a, top_b;
+    int bottom_a, bottom_b;
+    
+    // Calculate the sides of rect A
+    top_a = a.y;
+    bottom_a = a.y + a.h;
+
+    // Calculate the sides of rect B
+    top_b = b.y;
+    bottom_b = b.y + b.h;
+
+    // If any of the sides from A are outside of B
+    if (bottom_a <= top_b)
+    {
+        return false;
+    }
+
+    if (top_a >= bottom_b)
+    {
+        return false;
+    }
+
+    // If none of the sides from A are outside B
+    return true;
+}
+
 float Util::degrees_to_radians(float degrees)
 {
     return degrees * (M_PI / 180);
@@ -164,8 +193,7 @@ vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
         {
             for (int k = j + 1; k < possible_collisions[i].size(); k++)
             {
-                // TODO: PERFORMANCE: Could be cheaper by only checking if y axis is colliding
-                if (Util::check_collision(possible_collisions[i][j]->collider, possible_collisions[i][k]->collider))
+                if (Util::check_y_axis_collision(possible_collisions[i][j]->collider, possible_collisions[i][k]->collider))
                 {
                     vector<Node*> collision = {possible_collisions[i][j], possible_collisions[i][k]};
                     collisions.push_back(collision);

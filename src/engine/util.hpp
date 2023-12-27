@@ -30,6 +30,12 @@ public:
     /// @return true if the two rects are colliding, false otherwise
     static bool check_collision(SDL_Rect a, SDL_Rect b);
 
+    /// @brief checks collision between two SDL_Rects on the x axis only
+    /// @param a The first SDL_Rect
+    /// @param b The second SDL_Rect
+    /// @return true if the two rects are colliding on the y axis, false otherwise
+    static bool check_y_axis_collision(SDL_Rect a, SDL_Rect b);
+
     /// @brief Converts degrees to radians
     /// @param degrees The degrees to convert
     /// @return The radians
