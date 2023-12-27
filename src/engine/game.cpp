@@ -142,13 +142,11 @@ void Game::update(float delta)
     root_node->_physics_process(delta);
 
     // Update collision table
-    collisions = Util::get_collisions(root_node->get_all_nodes());
+    vector<Node *> nodes = root_node->get_all_nodes();
 
-    // COUt collisions
-    for (int i = 0; i < collisions.size(); i++)
-    {
-        cout << collisions[i][0]->name << " collided with " << collisions[i][1]->name << endl;
-    }
+    collisions = Util::get_collisions(nodes);
+    cout << "Collisions: " << collisions.size() << endl;
+    cout << "Nodes: " << nodes.size() << endl;
 }
 
 void Game::draw()

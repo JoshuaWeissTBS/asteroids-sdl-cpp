@@ -144,7 +144,7 @@ vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
         }
         else
         {
-            if (nodes[i]->get_global_position().x - nodes[i - 1]->get_global_position().x < nodes[i]->width + nodes[i - 1]->height) {
+            if (nodes[i]->get_global_position().x - nodes[i - 1]->get_global_position().x < nodes[i]->width + nodes[i - 1]->width) {
                 possible_collisions_for_node.push_back(nodes[i]);
             } else {
                 possible_collisions.push_back(possible_collisions_for_node);
