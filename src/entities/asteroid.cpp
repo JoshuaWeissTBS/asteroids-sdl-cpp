@@ -1,6 +1,7 @@
 #include "asteroid.hpp"
 #include "game.hpp"
 #include "util.hpp"
+#include "bullet.hpp"
 
 Asteroid::Asteroid(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
@@ -24,10 +25,17 @@ void Asteroid::physics_process(float delta)
 {
     this->rotation_degrees += 1;
     move();
+}
 
-    // if (Util::check_collision(this->collider, player->collider))
-    // {
-    //     cout << "Asteroid collided with player" << endl;
-    //     marked_for_deletion = true;
-    // }
+void Asteroid::on_collision(Node* node)
+{
+    // if node is of type asteroid
+    if (dynamic_cast<Bullet*>(node) != NULL)
+    {
+        health--;
+        if (health <= 0)
+        {
+            marked_for_deletion = true;
+        }
+    }
 }

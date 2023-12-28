@@ -86,7 +86,7 @@ public:
     /// @param node The node that collided with this node
     virtual void on_collision(Node *node);
 
-    SDL_Rect collider;
+    SDL_FRect collider;
 private:
     Texture *texture = NULL;
     /// @brief The position of the node relative to the screen

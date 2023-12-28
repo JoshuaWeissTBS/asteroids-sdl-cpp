@@ -28,7 +28,7 @@ public:
     /// @param a The first SDL_Rect
     /// @param b The second SDL_Rect
     /// @return true if the two rects are colliding, false otherwise
-    static bool check_collision(SDL_Rect a, SDL_Rect b);
+    static bool check_collision(SDL_FRect a, SDL_FRect b);
 
     /// @brief checks collision between two SDL_Rects on the x axis only
     /// @param a The first SDL_Rect

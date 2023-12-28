@@ -50,13 +50,13 @@ float Util::move_toward(float current, float target, float max_delta)
     return current;
 }
 
-bool Util::check_collision(SDL_Rect a, SDL_Rect b)
+bool Util::check_collision(SDL_FRect a, SDL_FRect b)
 {
     // The sides of the rectangles
-    int left_a, left_b;
-    int right_a, right_b;
-    int top_a, top_b;
-    int bottom_a, bottom_b;
+    double left_a, left_b;
+    double right_a, right_b;
+    double top_a, top_b;
+    double bottom_a, bottom_b;
     
     // Calculate the sides of rect A
     left_a = a.x;

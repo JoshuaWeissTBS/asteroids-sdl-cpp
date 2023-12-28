@@ -38,6 +38,6 @@ void Bullet::on_collision(Node* node)
         // flip the rotation
         rotation_degrees += 180;
         collide_count++;
-        cout << "Collide count: " << collide_count << endl;
+        marked_for_deletion = true;
     }
 }

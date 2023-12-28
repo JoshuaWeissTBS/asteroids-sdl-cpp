@@ -11,8 +11,10 @@ class Asteroid : public Node {
 public:
     Asteroid(Vector2 position, int width, int height, double rotation_degrees = 0);
 
+    int health = 10;
     void input(SDL_Event *event) override;
     void physics_process(float delta) override;
+    void on_collision(Node* node) override;
 };
 
 #endif

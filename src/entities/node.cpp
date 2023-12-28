@@ -131,8 +131,8 @@ void Node::render()
 
     // render collider
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
-    SDL_RenderDrawRect(renderer, &collider);
-    SDL_RenderDrawPoint(renderer, global_position.x, global_position.y);
+    SDL_RenderDrawRectF(renderer, &collider);
+    SDL_RenderDrawPointF(renderer, global_position.x, global_position.y);
 
     texture->render(global_position.x, global_position.y, NULL, rotation_degrees);
 }
