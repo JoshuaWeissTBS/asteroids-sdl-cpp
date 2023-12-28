@@ -132,6 +132,7 @@ void Node::render()
     // render collider
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
     SDL_RenderDrawRect(renderer, &collider);
+    SDL_RenderDrawPoint(renderer, global_position.x, global_position.y);
 
     texture->render(global_position.x, global_position.y, NULL, rotation_degrees);
 }
@@ -168,4 +169,8 @@ vector<Node*> Node::get_all_nodes()
     }
 
     return nodes;
+}
+
+void Node::on_collision(Node *node)
+{
 }

@@ -145,8 +145,8 @@ void Game::update(float delta)
     vector<Node *> nodes = root_node->get_all_nodes();
 
     collisions = Util::get_collisions(nodes);
-    cout << "Collisions: " << collisions.size() << endl;
-    cout << "Nodes: " << nodes.size() << endl;
+    // cout << "Collisions: " << collisions.size() << endl;
+    // cout << "Nodes: " << nodes.size() << endl;
 }
 
 void Game::draw()

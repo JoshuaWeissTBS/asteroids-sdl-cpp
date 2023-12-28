@@ -1,6 +1,7 @@
 #include "bullet.hpp"
 #include "game.hpp"
 #include "util.hpp"
+#include "asteroid.hpp"
 
 Bullet::Bullet(Vector2 position, double rotation_degrees) : Node(position, 16, 16, rotation_degrees)
 {
@@ -24,4 +25,19 @@ void Bullet::physics_process(float delta)
     }
 
     // TODO: check collision with all asteroids
+}
+
+void Bullet::on_collision(Node* node)
+{
+    // if node is of type asteroid
+    if (dynamic_cast<Asteroid*>(node) != NULL)
+    {
+        // flip the velocity
+        velocity = velocity * -0.5;
+
+        // flip the rotation
+        rotation_degrees += 180;
+        collide_count++;
+        cout << "Collide count: " << collide_count << endl;
+    }
 }

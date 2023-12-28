@@ -166,6 +166,8 @@ vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
     vector<Node*> possible_collisions_for_node;
     for (int i = 0; i < nodes.size(); i++)
     {
+        nodes[i]->collisions_last_frame = nodes[i]->collisions;
+        nodes[i]->collisions.clear();
 
         if (i == 0)
         {
@@ -173,7 +175,8 @@ vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
         }
         else
         {
-            if (nodes[i]->get_global_position().x - nodes[i - 1]->get_global_position().x < nodes[i]->width + nodes[i - 1]->width) {
+            // TODO: PERFORMANCE: if nodes are connected like a chain, they all are added to the possible_collisions_for_node vector, but multiple links in the chain don't need to be checked for collisions
+            if (nodes[i]->get_global_position().x - (nodes[i]->width / 2) < nodes[i - 1]->get_global_position().x + (nodes[i - 1]->width / 2)) {
                 possible_collisions_for_node.push_back(nodes[i]);
             } else {
                 possible_collisions.push_back(possible_collisions_for_node);
@@ -193,8 +196,30 @@ vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
         {
             for (int k = j + 1; k < possible_collisions[i].size(); k++)
             {
-                if (Util::check_y_axis_collision(possible_collisions[i][j]->collider, possible_collisions[i][k]->collider))
+                if (Util::check_collision(possible_collisions[i][j]->collider, possible_collisions[i][k]->collider))
                 {
+                    // If the two nodes collided last frame, don't call on_node_collision again
+
+                    bool collided_last_frame = false;
+                    for (int l = 0; l < possible_collisions[i][j]->collisions_last_frame.size(); l++)
+                    {
+                        if (possible_collisions[i][j]->collisions_last_frame[l] == possible_collisions[i][k])
+                        {
+                            collided_last_frame = true;
+                            break;
+                        }
+                    }
+
+                    if (collided_last_frame == false)
+                    {
+                        possible_collisions[i][j]->on_collision(possible_collisions[i][k]);
+                        possible_collisions[i][k]->on_collision(possible_collisions[i][j]);
+                    }
+
+                    possible_collisions[i][j]->collisions.push_back(possible_collisions[i][k]);
+                    possible_collisions[i][k]->collisions.push_back(possible_collisions[i][j]);
+
+
                     vector<Node*> collision = {possible_collisions[i][j], possible_collisions[i][k]};
                     collisions.push_back(collision);
                 }

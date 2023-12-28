@@ -52,7 +52,7 @@ public:
     /// @param max The maximum value
     static double clamp (double value, double min, double max);
 
-    /// @brief Checks collisions between nodes and returns a vector of collided nodes
+    /// @brief Checks collisions between nodes and returns a vector of collided nodes. Sets collisions vector on each node.
     /// @param nodes The nodes to check collisions between
     /// @return A vector of collided nodes
     static vector<vector<Node*>> get_collisions(vector<Node*> nodes);

@@ -28,6 +28,10 @@ public:
     int height;
     Node* parent = NULL;
     vector<Node*> children = {};
+    // @brief A vector of nodes that this node is colliding with in this frame, updated after physics_process()
+    vector<Node*> collisions = {};
+    // @brief A vector of nodes that this node was colliding with in the last frame
+    vector<Node*> collisions_last_frame = {};
 
     // If true, the node will be deleted at the end of the frame
     bool marked_for_deletion = false;
@@ -77,6 +81,10 @@ public:
     /// @brief Gets all children nodes recursively and returns them in a vector
     /// @return the vector of nodes
     vector<Node*> get_all_nodes();
+
+    /// @brief Signal func that is called whenever a node collides with this node
+    /// @param node The node that collided with this node
+    virtual void on_collision(Node *node);
 
     SDL_Rect collider;
 private:
