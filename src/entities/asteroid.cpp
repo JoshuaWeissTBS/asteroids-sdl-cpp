@@ -35,7 +35,7 @@ void Asteroid::on_collision(Node* node)
         health--;
         if (health <= 0)
         {
-            // marked_for_deletion = true;
+            marked_for_deletion = true;
         }
     }
 }

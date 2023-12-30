@@ -31,10 +31,14 @@ void Bullet::on_collision(Node* node)
     if (dynamic_cast<Asteroid*>(node) != NULL)
     {
         // flip the velocity
-        velocity = velocity * -0.5;
+        velocity = velocity * -0.9;
 
         // flip the rotation
         rotation_degrees += 180;
-        // marked_for_deletion = true;
+        collision_count++;
+        if (collision_count > 1)
+        {
+            marked_for_deletion = true;
+        }
     }
 }
