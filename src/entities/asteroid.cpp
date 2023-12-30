@@ -3,7 +3,7 @@
 #include "util.hpp"
 #include "bullet.hpp"
 
-Asteroid::Asteroid(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
+Asteroid::Asteroid(Vector2 position, double width, double height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     name = "Asteroid";
 
@@ -35,7 +35,7 @@ void Asteroid::on_collision(Node* node)
         health--;
         if (health <= 0)
         {
-            marked_for_deletion = true;
+            // marked_for_deletion = true;
         }
     }
 }

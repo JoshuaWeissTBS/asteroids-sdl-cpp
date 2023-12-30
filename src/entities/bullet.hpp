@@ -12,7 +12,6 @@ public:
     Bullet(Vector2 position, double rotation_degrees = 0);
 
     int speed = 20;
-    int collide_count = 0;
 
     void physics_process(float delta) override;
     void on_collision(Node* node) override;

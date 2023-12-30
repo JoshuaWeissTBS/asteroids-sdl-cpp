@@ -14,7 +14,7 @@ using namespace std;
 class Node {
 public:
     // Constructor
-    Node(Vector2 position, int width, int height, double rotation_degrees);
+    Node(Vector2 position, double width, double height, double rotation_degrees);
 
     // Destructor
     ~Node();
@@ -24,8 +24,8 @@ public:
     Vector2 position;
     Vector2 velocity;
     double rotation_degrees;
-    int width;
-    int height;
+    double width;
+    double height;
     Node* parent = NULL;
     vector<Node*> children = {};
     // @brief A vector of nodes that this node is colliding with in this frame, updated after physics_process()
@@ -66,7 +66,7 @@ public:
     /// @brief Sets the size of the sprite
     /// @param width 
     /// @param height 
-    void set_sprite_size(int width, int height);
+    void set_sprite_size(float width, float height);
 
     /// @brief Add child node to this node
     /// @param node
@@ -87,6 +87,23 @@ public:
     virtual void on_collision(Node *node);
 
     SDL_FRect collider;
+
+    /// @brief Gets the left edge of the collider
+    /// @return the left edge of the collider
+    float get_left();
+
+    /// @brief Gets the right edge of the collider
+    /// @return the right edge of the collider
+    float get_right();
+
+    /// @brief Gets the top edge of the collider
+    /// @return the top edge of the collider
+    float get_top();
+
+    /// @brief Gets the bottom edge of the collider
+    /// @return the bottom edge of the collider
+    float get_bottom();
+
 private:
     Texture *texture = NULL;
     /// @brief The position of the node relative to the screen

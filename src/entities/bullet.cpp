@@ -23,8 +23,6 @@ void Bullet::physics_process(float delta)
     {
         marked_for_deletion = true;
     }
-
-    // TODO: check collision with all asteroids
 }
 
 void Bullet::on_collision(Node* node)
@@ -37,7 +35,6 @@ void Bullet::on_collision(Node* node)
 
         // flip the rotation
         rotation_degrees += 180;
-        collide_count++;
-        marked_for_deletion = true;
+        // marked_for_deletion = true;
     }
 }

@@ -3,7 +3,7 @@
 #include "game.hpp"
 #include "bullet.hpp"
 
-Player::Player(Vector2 position, int width, int height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
+Player::Player(Vector2 position, double width, double height, double rotation_degrees) : Node(position, width, height, rotation_degrees)
 {
     name = "Player";
     set_sprite("assets/img/spaceship.bmp");
@@ -23,6 +23,8 @@ Player::Player(Vector2 position, int width, int height, double rotation_degrees)
 void Player::input(SDL_Event *event)
 {
 }
+
+Uint32 lastShootTime = 0;
 
 void Player::physics_process(float delta)
 {
@@ -52,7 +54,19 @@ void Player::physics_process(float delta)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_SPACE])
     {
-        _shoot();
+
+        Uint32 currentTime = SDL_GetTicks();
+        Uint32 elapsedMilliseconds = currentTime - lastShootTime;
+
+        // Check if enough time has passed to shoot again
+        if (elapsedMilliseconds >= 100)
+        {
+            // Reset the timer
+            lastShootTime = currentTime;
+
+            // Shoot
+            _shoot();
+        }
     }
 
     move();
