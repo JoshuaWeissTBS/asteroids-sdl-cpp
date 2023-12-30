@@ -4,7 +4,7 @@ project(Asteroids VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-file(GLOB_RECURSE SOURCES "members/*.cpp" "members/*.hpp" "sdl_components/*.cpp" "sdl_components/*.hpp" "glad/src/glad.c" "entities/*.cpp" "entities/*.hpp"  "engine/*.cpp" "engine/*.hpp")
+file(GLOB_RECURSE SOURCES "members/*.cpp" "members/*.hpp" "sdl_components/*.cpp" "sdl_components/*.hpp" "glad/src/glad.c" "entities/base/*.cpp" "entities/base/*.hpp" "entities/*.cpp" "entities/*.hpp"  "engine/*.cpp" "engine/*.hpp")
 
 add_executable(Asteroids main.cpp ${SOURCES})
 
@@ -29,6 +29,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE "glad/include")
 # target_link_libraries(${PROJECT_NAME} PRIVATE "glad/src/glad.c")
 
 target_include_directories(${PROJECT_NAME} PRIVATE "entities")
+target_include_directories(${PROJECT_NAME} PRIVATE "entities/base")
 target_include_directories(${PROJECT_NAME} PRIVATE "engine")
 target_include_directories(${PROJECT_NAME} PRIVATE "members")
 target_include_directories(${PROJECT_NAME} PRIVATE "sdl_components")

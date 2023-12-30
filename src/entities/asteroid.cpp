@@ -32,6 +32,8 @@ void Asteroid::on_collision(Node* node)
     // if node is of type asteroid
     if (dynamic_cast<Bullet*>(node) != NULL)
     {
+        
+
         health--;
         if (health <= 0)
         {
