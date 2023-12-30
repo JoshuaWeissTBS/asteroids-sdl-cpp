@@ -10,11 +10,17 @@ SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
 
-Vector2 asteroid_spawn_points[4] = {
-    {0, 0},
-    {0, 1080},
-    {1920, 0},
-    {1920, 1080},
+Vector2 asteroid_spawn_points[10] = {
+    {-100, -100},
+    {-100, 1180},
+    {2020, -100},
+    {2020, 1180},
+    {-100, 640},
+    {2020, 640},
+    {1060, -100},
+    {1060, 1180},
+    {-100, 1060},
+    {2020, 1060}
 };
 
 Game::Game()
@@ -92,6 +98,9 @@ int Game::init(bool fullscreen)
     player = new Player(Vector2(1920/2, 1080/2), 65, 65);
     root_node->add_child(player);
 
+    Asteroid *asteroid = new Asteroid(Vector2(800, 800), 100, 100);
+    root_node->add_child(asteroid);
+
     return 0;
 }
 
@@ -136,7 +145,46 @@ void Game::input()
 
 void Game::update(float delta)
 {
+    // Spawn asteroids randomly
+    static float spawnTimer = 0.0f;
+    static float spawnInterval = 0.0f;
+
+    spawnTimer += delta;
+    if (spawnTimer >= spawnInterval)
+    {
+        int numAsteroids = rand() % 3 + 1; // Random number between 1 and 3
+
+        for (int i = 0; i < numAsteroids; i++)
+        {
+            // Pick random spawn point
+            int spawn_point_index = rand() % 10;
+
+            float spawnX = asteroid_spawn_points[spawn_point_index].x;
+            float spawnY = asteroid_spawn_points[spawn_point_index].y;
+            
+
+            Asteroid *asteroid = new Asteroid(Vector2(spawnX, spawnY), 100, 100);
+
+            // Direction towards player
+            Vector2 direction = asteroid->position.direction_to(player->position);
+
+            asteroid->velocity.x = direction.x * 5;
+            asteroid->velocity.y = direction.y * 5;
+
+            root_node->add_child(asteroid);
+        }
+
+        // Reset spawn timer and generate new spawn interval
+        spawnTimer = 0.0f;
+        spawnInterval = static_cast<float>(rand() % 5 + 1); // Random number between 1 and 5
+    }
+
     root_node->_physics_process(delta);
+
+    // Update collision table
+    vector<Node *> nodes = root_node->get_all_nodes();
+
+    collisions = Util::get_collisions(nodes);
 }
 
 void Game::draw()

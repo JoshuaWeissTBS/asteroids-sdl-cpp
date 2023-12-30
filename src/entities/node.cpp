@@ -4,10 +4,11 @@
 #include <iostream>
 
 #include "util.hpp"
+#include "game.hpp"
 
 using namespace std;
 
-Node::Node(Vector2 position, int width, int height, double rotation_degrees = 0)
+Node::Node(Vector2 position, double width, double height, double rotation_degrees = 0)
 {
     // TODO: Do I need to check if position is out of bounds?
     this->position = position;
@@ -60,7 +61,7 @@ void Node::set_sprite(const char *path)
     }
 }
 
-void Node::set_sprite_size(int width, int height)
+void Node::set_sprite_size(float width, float height)
 {
     texture->set_size(width, height);
 }
@@ -128,6 +129,11 @@ void Node::render()
         return;
     }
 
+    // render collider
+    // SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    // SDL_RenderDrawRectF(renderer, &collider);
+    // SDL_RenderDrawPointF(renderer, global_position.x, global_position.y);
+
     texture->render(global_position.x, global_position.y, NULL, rotation_degrees);
 }
 
@@ -148,4 +154,43 @@ void Node::_physics_process(float delta)
             continue;
         }
     }
+}
+
+vector<Node*> Node::get_all_nodes()
+{
+    vector<Node*> nodes = {};
+
+    nodes.push_back(this);
+
+    for (int i = 0; i < children.size(); i++)
+    {
+        vector<Node*> child_nodes = children[i]->get_all_nodes();
+        nodes.insert(nodes.end(), child_nodes.begin(), child_nodes.end());
+    }
+
+    return nodes;
+}
+
+void Node::on_collision(Node *node)
+{
+}
+
+float Node::get_left()
+{
+    return get_global_position().x - (collider.w / 2);
+}
+
+float Node::get_right()
+{
+    return get_global_position().x + (collider.w / 2);
+}
+
+float Node::get_top()
+{
+    return get_global_position().y - (collider.h / 2);
+}
+
+float Node::get_bottom()
+{
+    return get_global_position().y + (collider.h / 2);
 }

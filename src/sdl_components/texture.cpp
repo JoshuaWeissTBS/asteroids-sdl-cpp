@@ -83,7 +83,7 @@ void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *cent
 {
     if (texture == NULL) {
         // TODO: Throw an error instead of printing to stdout
-        printf("Cannot render texture, texture is NULL\n");
+        // printf("Cannot render texture, texture is NULL\n");
         return;
     }
 

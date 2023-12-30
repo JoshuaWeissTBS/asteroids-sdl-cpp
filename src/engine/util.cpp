@@ -1,5 +1,6 @@
 #include "util.hpp"
 #include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -11,11 +12,11 @@ Util::~Util()
 {
 }
 
-bool Util::pixel_out_of_bounds(int surface_width, int surface_height, int x, int y)
+bool Util::pixel_out_of_bounds(double surface_width, double surface_height, double x, double y)
 {
-    int pixel_index = y * surface_width + x;
-    int pixels_length = surface_width * surface_height;
-    int pixel_row = pixel_index / surface_width;
+    double pixel_index = y * surface_width + x;
+    double pixels_length = surface_width * surface_height;
+    double pixel_row = pixel_index / surface_width;
 
     if (pixel_index < 0 || pixel_index > pixels_length) {
         return true;
@@ -28,7 +29,7 @@ bool Util::pixel_out_of_bounds(int surface_width, int surface_height, int x, int
     return false;
 }
 
-float Util::move_toward(float current, float target, float max_delta)
+double Util::move_toward(double current, double target, double max_delta)
 {
     if (current < target)
     {
@@ -49,13 +50,13 @@ float Util::move_toward(float current, float target, float max_delta)
     return current;
 }
 
-bool Util::check_collision(SDL_Rect a, SDL_Rect b)
+bool Util::check_collision(SDL_FRect a, SDL_FRect b)
 {
     // The sides of the rectangles
-    int left_a, left_b;
-    int right_a, right_b;
-    int top_a, top_b;
-    int bottom_a, bottom_b;
+    float left_a, left_b;
+    float right_a, right_b;
+    float top_a, top_b;
+    float bottom_a, bottom_b;
     
     // Calculate the sides of rect A
     left_a = a.x;
@@ -94,12 +95,12 @@ bool Util::check_collision(SDL_Rect a, SDL_Rect b)
     return true;
 }
 
-float Util::degrees_to_radians(float degrees)
+double Util::degrees_to_radians(double degrees)
 {
     return degrees * (M_PI / 180);
 }
 
-float Util::radians_to_degrees(float radians)
+double Util::radians_to_degrees(double radians)
 {
     return radians * (180 / M_PI);
 }
@@ -118,4 +119,70 @@ double Util::clamp (double value, double min, double max)
     {
         return value;
     }
+}
+
+vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
+{
+    // Sweep and prune algorithm
+    // Sort nodes by x position
+    sort(nodes.begin(), nodes.end(), [](Node* a, Node* b) {
+        return a->get_left() < b->get_left();
+    });
+
+    vector<vector<Node*>> possible_collisions;
+
+    vector<Node*> active_intervals;
+    for (int i = 0; i < nodes.size(); i++)
+    {
+        nodes[i]->collisions_last_frame = nodes[i]->collisions;
+        nodes[i]->collisions.clear();
+
+        if (active_intervals.size() == 0) {
+            active_intervals.push_back(nodes[i]);
+            continue;
+        } 
+
+        for (int j = 0; j < active_intervals.size(); j++)
+        {
+            if (nodes[i]->get_left() < active_intervals[j]->get_right()) {
+                possible_collisions.push_back({nodes[i], active_intervals[j]});
+            } else {
+                active_intervals.erase(active_intervals.begin() + j);
+                j--;
+            }
+        }
+        active_intervals.push_back(nodes[i]);
+    }
+
+    // Iterate through possible collisions and check for actual collisions
+    vector<vector<Node*>> collisions;
+
+    for (int i = 0; i < possible_collisions.size(); i++)
+    {
+        if (Util::check_collision(possible_collisions[i][0]->collider, possible_collisions[i][1]->collider))
+        {
+            // If the two nodes collided last frame, don't call on_node_collision again
+
+            bool collided_last_frame = false;
+            for (int l = 0; l < possible_collisions[i][0]->collisions_last_frame.size(); l++)
+            {
+                if (possible_collisions[i][0]->collisions_last_frame[l] == possible_collisions[i][1])
+                {
+                    collided_last_frame = true;
+                    break;
+                }
+            }
+
+            if (collided_last_frame == false)
+            {
+                possible_collisions[i][0]->on_collision(possible_collisions[i][1]);
+                possible_collisions[i][1]->on_collision(possible_collisions[i][0]);
+            }
+
+            possible_collisions[i][0]->collisions.push_back(possible_collisions[i][1]);
+            possible_collisions[i][1]->collisions.push_back(possible_collisions[i][0]);
+        }
+    }
+
+    return collisions;
 }

@@ -1,9 +1,12 @@
 #include "bullet.hpp"
 #include "game.hpp"
 #include "util.hpp"
+#include "asteroid.hpp"
 
 Bullet::Bullet(Vector2 position, double rotation_degrees) : Node(position, 16, 16, rotation_degrees)
 {
+    name = "Bullet";
+
     this->set_sprite("assets/img/bullet.bmp");
     this->set_sprite_size(width, height);
 }
@@ -20,6 +23,22 @@ void Bullet::physics_process(float delta)
     {
         marked_for_deletion = true;
     }
+}
 
-    // TODO: check collision with all asteroids
+void Bullet::on_collision(Node* node)
+{
+    // if node is of type asteroid
+    if (dynamic_cast<Asteroid*>(node) != NULL)
+    {
+        // flip the velocity
+        velocity = velocity * -0.9;
+
+        // flip the rotation
+        rotation_degrees += 180;
+        collision_count++;
+        if (collision_count > 1)
+        {
+            marked_for_deletion = true;
+        }
+    }
 }

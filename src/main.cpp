@@ -48,6 +48,8 @@ int main()
         if (elapsed_time < ms_per_frame) {
             SDL_Delay(ms_per_frame - elapsed_time);
         }
+        int fps = static_cast<int>(round(1000.0 / (SDL_GetTicks() - last_frame_time)));
+        // cout << "FPS: " << fps << endl;
 
     }
 
