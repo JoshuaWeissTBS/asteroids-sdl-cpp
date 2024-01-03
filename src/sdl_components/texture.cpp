@@ -1,5 +1,6 @@
 #include "texture.hpp"
 #include "game.hpp"
+#include <glad/glad.h>
 
 Texture::Texture()
 {

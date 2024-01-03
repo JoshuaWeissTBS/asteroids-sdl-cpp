@@ -5,10 +5,64 @@
 #include "asteroid.hpp"
 #include "vector2.hpp"
 #include "player.hpp"
+#include <glad/glad.h>
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
+unsigned int vbo = 0;
+
+static unsigned int CompileShader(unsigned int type, const std::string& source)
+{
+    unsigned int id = glCreateShader(type);
+    // OpenGL expects a pointer to an array of pointers to chars
+    const char* src = source.c_str();
+    // Pass in the shader source code
+    glShaderSource(id, 1, &src, nullptr);
+    // Compile the shader
+    glCompileShader(id);
+
+    // Error handling
+    int result;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+
+    if (result == GL_FALSE)
+    {
+        // Get length of error message
+        int length;
+        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+        // Allocate memory on the stack for the error message
+        char* message = (char*)alloca(length * sizeof(char));
+        // Copy error message to message variable
+        glGetShaderInfoLog(id, length, &length, message);
+        // Print error message
+        std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
+        std::cout << message << std::endl;
+        // Delete shader
+        glDeleteShader(id);
+        return 0;
+    }
+
+    return id;
+}
+
+static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+{
+    unsigned int program = glCreateProgram();
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glValidateProgram(program);
+
+    // Delete shaders after linking
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    return program;
+}
 
 Vector2 asteroid_spawn_points[10] = {
     {-100, -100},
@@ -60,14 +114,14 @@ int Game::init(bool fullscreen)
         return 1;
     }
 
-    renderer = SDL_CreateRenderer(screen_window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL)
-    {
-        cout << "SDL_CreateRenderer failed: " << SDL_GetError() << endl;
-        return 1;
-    }
+    // renderer = SDL_CreateRenderer(screen_window, -1, SDL_RENDERER_ACCELERATED);
+    // if (renderer == NULL)
+    // {
+    //     cout << "SDL_CreateRenderer failed: " << SDL_GetError() << endl;
+    //     return 1;
+    // }
 
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    // SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     screen_surface = SDL_GetWindowSurface(screen_window);
     if (screen_surface == NULL)
@@ -91,6 +145,44 @@ int Game::init(bool fullscreen)
     }
 
     glViewport(0, 0, 1920, 1080);
+    
+    float positions[6] = {
+        -0.5f, -0.5f,
+         0.0f,  0.5f,
+         0.5f, -0.5f
+    };
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, positions, GL_STATIC_DRAW);
+
+    // Tells OpenGL how to interpret the data in the buffer
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    glEnableVertexAttribArray(0);
+
+    string vertexShader = 
+    "#version 330 core\n"
+    "\n"
+    "layout(location = 0) in vec4 position;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = position;\n"
+    "}";
+
+    string fragmentShader = 
+    "#version 330 core\n"
+    "\n"
+    "layout(location = 0) out vec4 color;\n"
+    "void main()\n"
+    "{\n"
+    "   color = vec4(1.0, 0.5, 0.5, 1.0);\n"
+    "}";
+
+    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    glUseProgram(shader);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 
 
     // Create player
@@ -189,17 +281,20 @@ void Game::update(float delta)
 
 void Game::draw()
 {
-    root_node->render();
+    // root_node->render();
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // SDL_UpdateWindowSurface(screen_window);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderPresent(renderer);
-    // SDL_GL_SwapWindow(screen_window);
+    // SDL_RenderPresent(renderer);
+    SDL_GL_SwapWindow(screen_window);
 }
 
 void Game::cleanup()
 {
     // TODO: Delete all nodes
+
+    // glDeleteProgram(shader);
 
     SDL_GL_DeleteContext(gl_context);
     gl_context = NULL;
@@ -208,7 +303,7 @@ void Game::cleanup()
     screen_surface = NULL;
     screen_window = NULL;
 
-    SDL_DestroyRenderer(renderer);
+    // SDL_DestroyRenderer(renderer);
     renderer = NULL;
 
     SDL_Quit();

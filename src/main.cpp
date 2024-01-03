@@ -16,6 +16,7 @@ int main()
 
     Uint32 last_frame_time = SDL_GetTicks();
 
+
     // Game loop
     while (game.running)
     {
@@ -27,7 +28,14 @@ int main()
         last_frame_time = current_time;
 
         // Clear the screen
-        SDL_RenderClear(renderer);
+        // SDL_RenderClear(renderer);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black
+
+        GLenum err = glGetError();
+        if (err != GL_NO_ERROR) {
+            cout << "OpenGL error: " << err << endl;
+        }
+
 
         // Handle all input events this frame (mouse, keyboard, etc) before updating the game state and rendering next frame
         game.input();
@@ -39,7 +47,7 @@ int main()
         game.draw();
 
         // Update the screen
-        SDL_RenderPresent(renderer);
+        // SDL_RenderPresent(renderer);
 
         // Cap framerate at 60 FPS
         Uint32 elapsed_time = SDL_GetTicks() - last_frame_time;
