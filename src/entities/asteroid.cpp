@@ -13,12 +13,6 @@ Asteroid::Asteroid(Vector2 position, double width, double height, double rotatio
 
 void Asteroid::input(SDL_Event *event)
 {
-    switch (event->type)
-    {
-    case SDL_MOUSEBUTTONDOWN:
-        cout << "Asteroid clicked" << endl;
-        break;
-    }
 }
 
 void Asteroid::physics_process(float delta)

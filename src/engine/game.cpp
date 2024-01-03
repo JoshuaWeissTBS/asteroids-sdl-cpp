@@ -6,63 +6,14 @@
 #include "vector2.hpp"
 #include "player.hpp"
 #include <glad/glad.h>
+#include "shader.hpp"
+
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
 unsigned int vbo = 0;
 
-static unsigned int CompileShader(unsigned int type, const std::string& source)
-{
-    unsigned int id = glCreateShader(type);
-    // OpenGL expects a pointer to an array of pointers to chars
-    const char* src = source.c_str();
-    // Pass in the shader source code
-    glShaderSource(id, 1, &src, nullptr);
-    // Compile the shader
-    glCompileShader(id);
-
-    // Error handling
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-    if (result == GL_FALSE)
-    {
-        // Get length of error message
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        // Allocate memory on the stack for the error message
-        char* message = (char*)alloca(length * sizeof(char));
-        // Copy error message to message variable
-        glGetShaderInfoLog(id, length, &length, message);
-        // Print error message
-        std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
-        std::cout << message << std::endl;
-        // Delete shader
-        glDeleteShader(id);
-        return 0;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
-{
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    // Delete shaders after linking
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
 
 Vector2 asteroid_spawn_points[10] = {
     {-100, -100},
@@ -160,25 +111,9 @@ int Game::init(bool fullscreen)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
     glEnableVertexAttribArray(0);
 
-    string vertexShader = 
-    "#version 330 core\n"
-    "\n"
-    "layout(location = 0) in vec4 position;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = position;\n"
-    "}";
+    ShaderProgramSource source = Shader::parse_shader("res/shaders/basic.shader");
 
-    string fragmentShader = 
-    "#version 330 core\n"
-    "\n"
-    "layout(location = 0) out vec4 color;\n"
-    "void main()\n"
-    "{\n"
-    "   color = vec4(1.0, 0.5, 0.5, 1.0);\n"
-    "}";
-
-    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    unsigned int shader = Shader::create_shader(source.vertex_source, source.fragment_source);
     glUseProgram(shader);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
