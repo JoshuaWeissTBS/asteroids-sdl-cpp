@@ -12,8 +12,6 @@
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
-unsigned int vbo = 0;
-
 
 Vector2 asteroid_spawn_points[10] = {
     {-100, -100},
@@ -97,24 +95,42 @@ int Game::init(bool fullscreen)
 
     glViewport(0, 0, 1920, 1080);
     
-    float positions[6] = {
+    float positions[12] = {
         -0.5f, -0.5f,
-         0.0f,  0.5f,
-         0.5f, -0.5f
+         0.5f, -0.5f,
+         0.5f,  0.5f,
+
+        -0.5f,  0.5f,
     };
 
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    unsigned int vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW);
 
     // Tells OpenGL how to interpret the data in the buffer
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
     glEnableVertexAttribArray(0);
 
+
+    unsigned int ibo = 0;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW);
+
     ShaderProgramSource source = Shader::parse_shader("res/shaders/basic.shader");
 
     unsigned int shader = Shader::create_shader(source.vertex_source, source.fragment_source);
     glUseProgram(shader);
+
+    // Set uniform
+    int location = glGetUniformLocation(shader, "u_Color");
+    glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -218,7 +234,7 @@ void Game::draw()
 {
     // root_node->render();
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     // SDL_UpdateWindowSurface(screen_window);
     // SDL_RenderPresent(renderer);

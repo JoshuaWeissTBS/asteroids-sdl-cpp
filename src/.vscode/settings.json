@@ -92,7 +92,8 @@
         "shared_mutex": "cpp",
         "spanstream": "cpp",
         "syncstream": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "cassert": "cpp"
     },
     "cmake.configureOnOpen": true
 }
