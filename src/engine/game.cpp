@@ -7,11 +7,16 @@
 #include "player.hpp"
 #include <glad/glad.h>
 #include "shader.hpp"
+#include "renderer.hpp"
+#include "vertex_buffer.hpp"
+#include "index_buffer.hpp"
 
 
 SDL_Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
+VertexBuffer *vb = NULL;
+IndexBuffer *ib = NULL;
 
 Vector2 asteroid_spawn_points[10] = {
     {-100, -100},
@@ -108,20 +113,13 @@ int Game::init(bool fullscreen)
         2, 3, 0
     };
 
-    unsigned int vbo = 0;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW);
+    vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
 
     // Tells OpenGL how to interpret the data in the buffer
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
     glEnableVertexAttribArray(0);
 
-
-    unsigned int ibo = 0;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW);
+    ib = new IndexBuffer(indices, 6);
 
     ShaderProgramSource source = Shader::parse_shader("res/shaders/basic.shader");
 
