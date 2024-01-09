@@ -11,6 +11,7 @@
 #include "vertex_buffer.hpp"
 #include "index_buffer.hpp"
 #include "vertex_array.hpp"
+#include "shader.hpp"
 
 
 SDL_Renderer *renderer = NULL;
@@ -20,6 +21,7 @@ VertexArray *va = NULL;
 VertexBuffer *vb = NULL;
 VertexBufferLayout *layout = NULL;
 IndexBuffer *ib = NULL;
+Shader *shader = NULL;
 
 Vector2 asteroid_spawn_points[10] = {
     {-100, -100},
@@ -125,20 +127,20 @@ int Game::init(bool fullscreen)
 
     ib = new IndexBuffer(indices, 6);
 
-    ShaderProgramSource source = Shader::parse_shader("res/shaders/basic.shader");
-
-    unsigned int shader = Shader::create_shader(source.vertex_source, source.fragment_source);
-    glUseProgram(shader);
-
-    // Set uniform
-    int location = glGetUniformLocation(shader, "u_Color");
-    glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f);
+    shader = new Shader("res/shaders/basic.shader");
+    shader->bind();
+    shader->set_uniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
     // Unbind everything
-    glBindVertexArray(0);
-    // glUseProgram(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    va->unbind();
+    vb->unbind();
+    ib->unbind();
+    shader->unbind();
+
+    // glBindVertexArray(0);
+    // // glUseProgram(0);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -243,7 +245,9 @@ void Game::draw()
     // root_node->render();
 
     va->bind();
+    vb->bind();
     ib->bind();
+    shader->bind();
 
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

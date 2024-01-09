@@ -4,8 +4,49 @@
 #include <sstream>
 #include <string>
 #include <glad/glad.h>
+#include "renderer.hpp"
 
 using namespace std;
+
+Shader::Shader(const string& file)
+    : file_path(file), m_renderer_id(0)
+{
+    ShaderProgramSource source = parse_shader(file);
+    m_renderer_id = create_shader(source.vertex_source, source.fragment_source);
+}
+
+Shader::~Shader()
+{
+    glDeleteProgram(m_renderer_id);
+}
+
+void Shader::bind() const
+{
+    glUseProgram(m_renderer_id);
+}
+
+void Shader::unbind() const
+{
+    glUseProgram(0);
+}
+
+void Shader::set_uniform4f(const string& name, float v0, float v1, float v2, float v3)
+{
+    glUniform4f(get_uniform_location(name), v0, v1, v2, v3);
+}
+
+unsigned int Shader::get_uniform_location(const string& name)
+{
+    if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
+        return m_uniform_location_cache[name];
+
+    int location = glGetUniformLocation(m_renderer_id, name.c_str());
+
+    m_uniform_location_cache[name] = location;
+
+    return location;
+
+}
 
 ShaderProgramSource Shader::parse_shader(const string& file) {
     ifstream stream(file);
