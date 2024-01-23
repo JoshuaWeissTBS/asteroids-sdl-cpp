@@ -23,7 +23,6 @@ public:
     // Other member functions and variables
     bool running = false;
     const char *title = "Asteroids";
-    vector<vector<Node*>> collisions;
     int max_fps = 60;
     int width = 1920;
     int height = 1080;
