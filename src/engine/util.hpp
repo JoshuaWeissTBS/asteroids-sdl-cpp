@@ -49,7 +49,7 @@ public:
     /// @brief Checks collisions between nodes and returns a vector of collided nodes. Sets collisions vector on each node.
     /// @param nodes The nodes to check collisions between
     /// @return A vector of collided nodes
-    static vector<vector<Node*>> get_collisions(vector<Node*> nodes);
+    static void get_collisions(vector<Node*> nodes);
 };
 
 #endif // UTIL_HPP

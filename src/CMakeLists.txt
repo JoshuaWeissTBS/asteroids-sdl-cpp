@@ -7,7 +7,9 @@ enable_testing()
 file(GLOB_RECURSE SOURCES "members/*.cpp" "members/*.hpp" "sdl_components/*.cpp" "sdl_components/*.hpp" "glad/src/glad.c" "entities/base/*.cpp" "entities/base/*.hpp" "entities/*.cpp" "entities/*.hpp"  "engine/*.cpp" "engine/*.hpp")
 
 add_executable(Asteroids main.cpp ${SOURCES})
-
+# set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+# set(CMAKE_CXX_FLAGS_DEBUG "-g -O3")
+# set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CMAKE_CXX_STANDARD 20)
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
