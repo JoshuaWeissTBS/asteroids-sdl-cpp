@@ -2,7 +2,6 @@
 
 #include <glad/glad.h>
 #include <vector>
-#include "renderer.hpp"
 
 struct VertexBufferElement {
     unsigned int type;

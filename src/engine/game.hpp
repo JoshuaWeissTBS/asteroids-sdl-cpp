@@ -6,10 +6,11 @@
 #include "node.hpp"
 #include <vector>
 #include "player.hpp"
+#include "renderer.hpp"
 
 using namespace std;
 
-extern SDL_Renderer *renderer;
+extern Renderer *renderer;
 extern SDL_Window *screen_window;
 extern Player *player;
 class Game {
@@ -31,6 +32,7 @@ public:
     SDL_GLContext gl_context;
     int init(bool fullscreen);
     /// @brief Handles input
+    void clear_screen() const;
     void input();
     void update(float delta);
     void draw();

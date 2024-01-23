@@ -12,39 +12,41 @@ Texture::~Texture()
 
 bool Texture::load_from_file (const char *path)
 {
-    free();
+    return false; // TODO: remove this line
+    
+    // free();
 
-    SDL_Texture* new_texture = NULL;
+    // SDL_Texture* new_texture = NULL;
 
-    // Load image at specified path
-    SDL_Surface* loaded_surface = SDL_LoadBMP(path);
-    if (loaded_surface == NULL) {
-        // TODO: throw error instead of printing to stdout
-        printf("Unable to load image, likely the path is incorrect %s | SDL Error: %s\n", path, SDL_GetError());
-        printf("Current working directory: %s\n", SDL_GetBasePath());
-        return false;
-    }
+    // // Load image at specified path
+    // SDL_Surface* loaded_surface = SDL_LoadBMP(path);
+    // if (loaded_surface == NULL) {
+    //     // TODO: throw error instead of printing to stdout
+    //     printf("Unable to load image, likely the path is incorrect %s | SDL Error: %s\n", path, SDL_GetError());
+    //     printf("Current working directory: %s\n", SDL_GetBasePath());
+    //     return false;
+    // }
 
-    new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
+    // new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
 
-    if (new_texture == NULL) {
-        // TODO: throw error instead of printing to stdout
-        printf("Unable to create texture from %s | SDL Error: %s\n", path, SDL_GetError());
-        SDL_FreeSurface(loaded_surface);
-        return false;
-    } else {
-        // Get image dimensions
-        width = loaded_surface->w;
-        height = loaded_surface->h;
-    }
+    // if (new_texture == NULL) {
+    //     // TODO: throw error instead of printing to stdout
+    //     printf("Unable to create texture from %s | SDL Error: %s\n", path, SDL_GetError());
+    //     SDL_FreeSurface(loaded_surface);
+    //     return false;
+    // } else {
+    //     // Get image dimensions
+    //     width = loaded_surface->w;
+    //     height = loaded_surface->h;
+    // }
 
-    // Get rid of old loaded surface
-    SDL_FreeSurface(loaded_surface);
+    // // Get rid of old loaded surface
+    // SDL_FreeSurface(loaded_surface);
 
-    texture = new_texture;
-    new_texture = NULL;
+    // texture = new_texture;
+    // new_texture = NULL;
 
-    return true;
+    // return true;
 }
 
 void Texture::free()
@@ -82,6 +84,7 @@ void Texture::set_size(int width, int height)
 
 void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *center, SDL_RendererFlip flip)
 {
+    return; // TODO: remove this line
     if (texture == NULL) {
         // TODO: Throw an error instead of printing to stdout
         // printf("Cannot render texture, texture is NULL\n");
@@ -98,5 +101,5 @@ void Texture::render(int x, int y, SDL_Rect *clip, double angle, SDL_Point *cent
         render_quad.h = clip->h;
     }
 
-    SDL_RenderCopyEx(renderer, texture, clip, &render_quad, angle, center, flip);
+    // SDL_RenderCopyEx(renderer, texture, clip, &render_quad, angle, center, flip);
 }

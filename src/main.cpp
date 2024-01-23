@@ -28,8 +28,7 @@ int main()
         last_frame_time = current_time;
 
         // Clear the screen
-        // SDL_RenderClear(renderer);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black
+        game.clear_screen();
 
         GLenum err = glGetError();
         if (err != GL_NO_ERROR) {

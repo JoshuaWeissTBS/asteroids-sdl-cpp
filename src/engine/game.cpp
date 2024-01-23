@@ -14,7 +14,7 @@
 #include "shader.hpp"
 
 
-SDL_Renderer *renderer = NULL;
+Renderer *renderer = NULL;
 SDL_Window *screen_window = NULL;
 Player *player = NULL;
 VertexArray *va = NULL;
@@ -73,15 +73,6 @@ int Game::init(bool fullscreen)
         return 1;
     }
 
-    // renderer = SDL_CreateRenderer(screen_window, -1, SDL_RENDERER_ACCELERATED);
-    // if (renderer == NULL)
-    // {
-    //     cout << "SDL_CreateRenderer failed: " << SDL_GetError() << endl;
-    //     return 1;
-    // }
-
-    // SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
     screen_surface = SDL_GetWindowSurface(screen_window);
     if (screen_surface == NULL)
     {
@@ -137,6 +128,8 @@ int Game::init(bool fullscreen)
     ib->unbind();
     shader->unbind();
 
+    renderer = new Renderer();
+
     // glBindVertexArray(0);
     // // glUseProgram(0);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -155,6 +148,11 @@ int Game::init(bool fullscreen)
     root_node->add_child(asteroid);
 
     return 0;
+}
+
+void Game::clear_screen() const
+{
+    renderer->clear();
 }
 
 void Game::input()
@@ -245,15 +243,12 @@ void Game::draw()
     // root_node->render();
 
     va->bind();
-    vb->bind();
-    ib->bind();
-    shader->bind();
 
+    renderer->draw(*va, *ib, *shader);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     // SDL_UpdateWindowSurface(screen_window);
-    // SDL_RenderPresent(renderer);
     SDL_GL_SwapWindow(screen_window);
 }
 
@@ -270,7 +265,6 @@ void Game::cleanup()
     screen_surface = NULL;
     screen_window = NULL;
 
-    // SDL_DestroyRenderer(renderer);
     renderer = NULL;
 
     SDL_Quit();
