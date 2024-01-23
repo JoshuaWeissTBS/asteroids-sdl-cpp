@@ -177,20 +177,20 @@ void Node::on_collision(Node *node)
 
 float Node::get_left()
 {
-    return get_global_position().x - (collider.w / 2);
+    return get_global_position().x - (collider.w / 2.0);
 }
 
 float Node::get_right()
 {
-    return get_global_position().x + (collider.w / 2);
+    return get_global_position().x + (collider.w / 2.0);
 }
 
 float Node::get_top()
 {
-    return get_global_position().y - (collider.h / 2);
+    return get_global_position().y - (collider.h / 2.0);
 }
 
 float Node::get_bottom()
 {
-    return get_global_position().y + (collider.h / 2);
+    return get_global_position().y + (collider.h / 2.0);
 }

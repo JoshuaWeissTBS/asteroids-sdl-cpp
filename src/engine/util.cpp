@@ -121,68 +121,87 @@ double Util::clamp (double value, double min, double max)
     }
 }
 
-vector<vector<Node*>> Util::get_collisions(vector<Node*> nodes)
+struct Edge {
+    Node* node;
+    float x;
+    bool is_left;
+};
+
+void Util::get_collisions(vector<Node*> nodes)
 {
     // Sweep and prune algorithm
-    // Sort nodes by x position
-    sort(nodes.begin(), nodes.end(), [](Node* a, Node* b) {
-        return a->get_left() < b->get_left();
-    });
+    vector<Edge> edges;
 
-    vector<vector<Node*>> possible_collisions;
-
-    vector<Node*> active_intervals;
     for (int i = 0; i < nodes.size(); i++)
     {
-        nodes[i]->collisions_last_frame = nodes[i]->collisions;
-        nodes[i]->collisions.clear();
+        Node* node = nodes[i];
+        node->collisions_last_frame = node->collisions;
+        node->collisions = {};
 
-        if (active_intervals.size() == 0) {
-            active_intervals.push_back(nodes[i]);
-            continue;
-        } 
+        Edge left_edge;
+        left_edge.node = node;
+        left_edge.x = node->get_left();
+        left_edge.is_left = true;
 
-        for (int j = 0; j < active_intervals.size(); j++)
-        {
-            if (nodes[i]->get_left() < active_intervals[j]->get_right()) {
-                possible_collisions.push_back({nodes[i], active_intervals[j]});
-            } else {
-                active_intervals.erase(active_intervals.begin() + j);
-                j--;
-            }
-        }
-        active_intervals.push_back(nodes[i]);
+        Edge right_edge;
+        right_edge.node = node;
+        right_edge.x = node->get_right();
+        right_edge.is_left = false;
+
+        edges.push_back(left_edge);
+        edges.push_back(right_edge);
     }
 
-    // Iterate through possible collisions and check for actual collisions
-    vector<vector<Node*>> collisions;
 
-    for (int i = 0; i < possible_collisions.size(); i++)
+    vector<Edge> touching;
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) {
+        return a.x < b.x;
+    });
+
+    for (int i = 0; i < edges.size(); i++)
     {
-        if (Util::check_collision(possible_collisions[i][0]->collider, possible_collisions[i][1]->collider))
-        {
-            // If the two nodes collided last frame, don't call on_node_collision again
+        Edge edge = edges[i];
 
-            bool collided_last_frame = false;
-            for (int l = 0; l < possible_collisions[i][0]->collisions_last_frame.size(); l++)
-            {
-                if (possible_collisions[i][0]->collisions_last_frame[l] == possible_collisions[i][1])
-                {
-                    collided_last_frame = true;
-                    break;
+        if (edge.is_left)
+        {
+            for (int j = 0; j < touching.size(); j++) {
+                Edge edge2 = touching[j];
+                if (Util::check_collision(edge.node->collider, edge2.node->collider)) {
+                    // If the two nodes collided last frame, don't call on_node_collision again
+
+                    bool collided_last_frame = false;
+                    for (int l = 0; l < (int)edge.node->collisions_last_frame.size(); l++)
+                    {
+                        if (edge.node->collisions_last_frame[l] == edge2.node)
+                        {
+                            collided_last_frame = true;
+                            break;
+                        }
+                    }
+
+                    if (collided_last_frame == false)
+                    {
+                        edge.node->on_collision(edge2.node);
+                        edge2.node->on_collision(edge.node);
+                    }
+
+                    edge.node->collisions.push_back(edge2.node);
+                    edge2.node->collisions.push_back(edge.node);
                 }
             }
 
-            if (collided_last_frame == false)
+            touching.push_back(edge);
+        }
+        else
+        {
+            for (int j = 0; j < touching.size(); j++)
             {
-                possible_collisions[i][0]->on_collision(possible_collisions[i][1]);
-                possible_collisions[i][1]->on_collision(possible_collisions[i][0]);
+                if (edge.node == touching[j].node)
+                {
+                    touching.erase(touching.begin() + j);
+                    break;
+                }
             }
-
-            possible_collisions[i][0]->collisions.push_back(possible_collisions[i][1]);
-            possible_collisions[i][1]->collisions.push_back(possible_collisions[i][0]);
         }
     }
-
-    return collisions;
 }

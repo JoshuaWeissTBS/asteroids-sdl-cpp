@@ -237,7 +237,7 @@ void Game::update(float delta)
     // Update collision table
     vector<Node *> nodes = root_node->get_all_nodes();
 
-    collisions = Util::get_collisions(nodes);
+    Util::get_collisions(nodes);
 }
 
 void Game::draw()
